@@ -10,6 +10,8 @@ public class SpinWheel : MonoBehaviour
     [SerializeField] private Text spinButtonText;
     [SerializeField] private PickerWheel wheel;
     
+    private GameObject GameManagerObject;
+
     private string currentWheelPiece;
     private GameObject interactionBox;
 
@@ -33,6 +35,7 @@ public class SpinWheel : MonoBehaviour
     //Group and score 
 
     private void Start(){
+        GameManagerObject = GameObject.Find("GameManager");
         spinButtonUI.onClick.AddListener(Spin);
 
         interactionBox = GameObject.Find("InteractionBox");
@@ -120,16 +123,18 @@ public class SpinWheel : MonoBehaviour
     public void ShowAnswer(){
         timeupContainer.SetActive(false);
         answerContainer.SetActive(true);
+        GameObject.Find("RightOrWrong").GetComponent<Text>().text = "Did " + GameManager.teams[GameManager.currentTeamID].teamName + " get it right?";
         timerValue = 10f;
     }
 
     public void VerifyAnswer(bool answer){
         if(answer){
-            Debug.Log("Right Answer! +1 point");
+            GameManagerObject.GetComponent<GameManager>().AddPoint();
         }
         else{
             Debug.Log("Wrong Answer! goofy mf");
         }
+        GameManagerObject.GetComponent<GameManager>().TurnChange();
         answerContainer.SetActive(false);
         interactionBox.SetActive(false);
         spinButtonUI.interactable = true;
