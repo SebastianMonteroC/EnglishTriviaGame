@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using EasyUI.PickerWheelUI;
 using UnityEngine.UI;
 
@@ -20,6 +21,7 @@ public class SpinWheel : MonoBehaviour
     private GameObject timeupContainer;
     private GameObject confirmPlayContainer;
     private GameObject answerContainer;
+    private GameObject winnerContainer;
 
     //Play box displayed after spinning the wheel
     private Text learningAbility;
@@ -29,7 +31,7 @@ public class SpinWheel : MonoBehaviour
     private Text questionAbility;
     private Text question;
     private Text timer;
-    private float timerValue = 10f;
+    private float timerValue = 3f;
     private bool timerOn;
 
     //Group and score 
@@ -58,10 +60,13 @@ public class SpinWheel : MonoBehaviour
 
         answerContainer = GameObject.Find("AnswerContainer");
 
+        winnerContainer = GameObject.Find("WinnerContainer");
+
         timeupContainer.SetActive(false);
         questionContainer.SetActive(false);
         confirmPlayContainer.SetActive(false);
         answerContainer.SetActive(false);
+        winnerContainer.SetActive(false);
 
         interactionBox.SetActive(false);
     }
@@ -134,11 +139,28 @@ public class SpinWheel : MonoBehaviour
         else{
             Debug.Log("Wrong Answer! goofy mf");
         }
-        GameManagerObject.GetComponent<GameManager>().TurnChange();
+
         answerContainer.SetActive(false);
-        interactionBox.SetActive(false);
-        spinButtonUI.interactable = true;
-        spinButtonText.text = "Spin!";
+        if(!GameManager.winner){
+            GameManagerObject.GetComponent<GameManager>().TurnChange();
+            interactionBox.SetActive(false);
+            spinButtonUI.interactable = true;
+            spinButtonText.text = "Spin!";
+        }
+        else{
+            ShowWinnerScreen();
+            Debug.Log("Winner winner chicken dinner");
+        }
+    }
+
+    private void ShowWinnerScreen(){
+        winnerContainer.SetActive(true);
+        GameObject.Find("WinnerTitle").GetComponent<Text>().text = GameManager.teams[GameManager.currentTeamID].teamName + " wins!";
+    }
+
+    public void BackToMainMenu(){
+        winnerContainer.SetActive(false);
+        SceneManager.LoadScene("TeamPicker");
     }
 }
 

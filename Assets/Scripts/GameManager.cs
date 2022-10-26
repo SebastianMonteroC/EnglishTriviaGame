@@ -8,15 +8,26 @@ public class GameManager : MonoBehaviour
 {
     public static List<Team> teams = new List<Team>();
     public static int currentTeamID;
+    public static int pointsToWin;
+    public static bool winner;
 
     public void Start(){
         currentTeamID = 0;
+        winner = false;
         TeamTurn();
     }
 
     public void AddPoint(){
         teams[currentTeamID].score++;
         Debug.Log("The team " + teams[currentTeamID].teamName + " has " + teams[currentTeamID].score + " points.");
+        VerifyWin();
+    }
+
+    private void VerifyWin(){
+        if(teams[currentTeamID].score == pointsToWin){
+            Debug.Log("The team " + teams[currentTeamID].teamName + " has won");
+            winner = true;
+        }
     }
 
     private void DisplayTeams(){
