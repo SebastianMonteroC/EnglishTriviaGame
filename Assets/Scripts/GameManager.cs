@@ -52,4 +52,10 @@ public class GameManager : MonoBehaviour
         currentTeamID = currentTeamID == teams.Count-1 ? 0 : currentTeamID + 1;
         TeamTurn();
     }
+
+    public void ResetGame(){
+        currentTeamID = 0;
+        winner = false;
+        teams.Clear();
+    }
 }

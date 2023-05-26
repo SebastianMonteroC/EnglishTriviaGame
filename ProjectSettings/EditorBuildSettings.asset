@@ -11,4 +11,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/WheelScreen.unity
     guid: 2433350e10feed149ad207b92b8f8d14
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: 43dc884c345dac648ab4c0c763fb5d24
+  - enabled: 1
+    path: Assets/Scenes/SettingsMenu.unity
+    guid: 06b14e9cdbd71bf4c915f7758a0fde41
   m_configObjects: {}

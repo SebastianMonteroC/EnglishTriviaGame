@@ -36,51 +36,57 @@ public class SetGame : MonoBehaviour
     }
 
     public void AddNewTeam() {
-        Text teamlistText = GameObject.Find("TempTeamText").GetComponent<Text>();
         GameManager.teams.Add(new Team(inputField.text));
         RefreshTeamListScreen();
-        teamlistText.text += GameManager.teams.Count + ". " + inputField.text + "\n";
-        inputField.text = "";
     }
 
+    public string GenerateTeamList(){
+        string teamList = "";
+        int teamCount = 0;
+        foreach (var i in GameManager.teams) {
+            teamCount++;
+            teamList += teamCount + ". " + i.teamName + "\n";
+        }
+        return teamList;
+    }
     void RefreshTeamListScreen() {
         Text teamlistText = GameObject.Find("TempTeamText").GetComponent<Text>();
+        teamlistText.text = GenerateTeamList();
         GameObject.Find("TeamsAddedCount").GetComponent<Text>().text = "Teams added: " + GameManager.teams.Count;
         switch(GameManager.teams.Count) {
             case > 7:
-                teamlistText.fontSize = 45;
+                teamlistText.fontSize = 40;
                 GameObject.Find("MinMaxText").GetComponent<Text>().text = "Max amount of teams reached! (8)";
                 break;
             case > 6:
-                teamlistText.fontSize = 55;
+                teamlistText.fontSize = 40;
                 break;
             case > 5:
-                teamlistText.fontSize = 60;
+                teamlistText.fontSize = 50;
                 break;
             case > 4:
-                teamlistText.fontSize = 70;
+                teamlistText.fontSize = 60;
                 break;
             case > 3:
-                teamlistText.fontSize = 80;
+                teamlistText.fontSize = 65;
                 break;
             case > 2:
-                teamlistText.fontSize = 90;
+                teamlistText.fontSize = 70;
                 break;
             case > 1:
-                teamlistText.fontSize = 100;
+                teamlistText.fontSize = 75;
                 GameObject.Find("MinMaxText").GetComponent<Text>().text = "";
                 break;
             case > 0:
-                teamlistText.fontSize = 110;
+                teamlistText.fontSize = 80;
+                GameObject.Find("MinMaxText").GetComponent<Text>().text = "A minimum of 2 teams is required to start the game!";
                 break;
         }
     }
     
     public void UndoLastAdded() {
-        Text teamlistText = GameObject.Find("TempTeamText").GetComponent<Text>();
+        GameManager.teams.RemoveAt(GameManager.teams.Count - 1);
         RefreshTeamListScreen();
-
-        teamlistText.text = "";
     }
 
     public void ButtonCheck() {
@@ -107,5 +113,10 @@ public class SetGame : MonoBehaviour
             pointsToWin--;
         }
         pointsText.text = "Points to win: " + pointsToWin.ToString();
+    }
+
+    public void BackToMenu() {
+        GameManager.teams.Clear();
+        SceneManager.LoadScene("MainMenu");
     }
 }
