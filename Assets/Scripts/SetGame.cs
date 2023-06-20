@@ -100,6 +100,12 @@ public class SetGame : MonoBehaviour
         addPointsButton.interactable = pointsToWin == 10 ? false : true;
     }
 
+    public void TestSetGame() {
+        GameManager.unit = "1";
+        GameManager.grade = "8";
+        StartGame();
+    }
+
     public void StartGame() {
         GameManager.pointsToWin = this.pointsToWin;
         SceneManager.LoadScene("WheelScreen");

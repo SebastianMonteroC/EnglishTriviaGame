@@ -31,10 +31,12 @@ public class SpinWheel : MonoBehaviour
     private Text questionAbility;
     private Text question;
     private Text timer;
-    private float timerValue = 3f;
+    private float timerValue = 10f;
     private bool timerOn;
 
-    //Group and score 
+    //Question Loader
+    private QuestionManager questionManager;
+    Question currentQuestion;
 
     private void Start(){
         GameManagerObject = GameObject.Find("GameManager");
@@ -69,6 +71,8 @@ public class SpinWheel : MonoBehaviour
         winnerContainer.SetActive(false);
 
         interactionBox.SetActive(false);
+
+        questionManager = new QuestionManager(GameManager.grade, GameManager.unit);
     }
 
     private void Spin(){
@@ -87,18 +91,39 @@ public class SpinWheel : MonoBehaviour
         interactionBox.SetActive(true);
         confirmPlayContainer.SetActive(true);
         learningAbility.text = currentWheelPiece;
-        confirmPlayContainer.transform.Find(currentWheelPiece + "Image").gameObject.GetComponent<Image>().enabled = true;;
+        confirmPlayContainer.transform.Find(currentWheelPiece + "Image").gameObject.GetComponent<Image>().enabled = true;
     }
 
     public void BeginTurn(){
+        this.currentQuestion = GetQuestion(currentWheelPiece);
         GameObject.Find(currentWheelPiece + "Image").GetComponent<Image>().enabled = false;
         confirmPlayContainer.SetActive(false);
         questionContainer.SetActive(true);
         GameObject.Find("QuestionTheme").GetComponent<Text>().text = currentWheelPiece;
+        GameObject.Find("Question").GetComponent<Text>().text = this.currentQuestion.question;
         timer.text = timerValue.ToString();
         StartCoroutine(RunTimer());
     }
 
+    Question GetQuestion(string category) {
+        Question question = new Question();
+        switch(category) {
+            case "Reading":
+                question = this.questionManager.GetReadingQuestion();
+            break;
+            case "Writing":
+                question = this.questionManager.GetReadingQuestion();
+            break;
+            case "Speaking":
+                question = this.questionManager.GetReadingQuestion();
+            break;
+            case "Listening":
+                question = this.questionManager.GetReadingQuestion();
+            break;
+        }
+        return question;
+    }
+    
     private IEnumerator RunTimer(){
         Color color = Color.black;
         while (timerValue > 0){
@@ -137,7 +162,8 @@ public class SpinWheel : MonoBehaviour
             GameManagerObject.GetComponent<GameManager>().AddPoint();
         }
         else{
-            Debug.Log("Wrong Answer! goofy mf");
+            Debug.Log("Wrong Answer! goofer!");
+            this.questionManager.ReadingIncorrectAnswer(this.currentQuestion);
         }
 
         answerContainer.SetActive(false);
@@ -163,4 +189,3 @@ public class SpinWheel : MonoBehaviour
         SceneManager.LoadScene("TeamPicker");
     }
 }
-

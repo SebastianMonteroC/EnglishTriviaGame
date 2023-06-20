@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
     public static int currentTeamID;
     public static int pointsToWin;
     public static bool winner;
+    public static string unit;
+    public static string grade;
 
     public void Start(){
         currentTeamID = 0;

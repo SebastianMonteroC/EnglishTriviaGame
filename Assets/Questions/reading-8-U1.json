@@ -1,0 +1,10 @@
+{
+    "Question" : [
+        {
+            "question" : "Read the following sentence out loud and extract Mariana's opinion about the Math subject. Pronunciation is considered."
+        },
+        {
+            "question" : "Read the following sentence out loud and extract Joe's opinion about the Math subject. Pronunciation is considered. \nJoe: “Ugh I'm so tired today! I stayed up trying to finish my Math homework, but I failed anyway. Why can't Math be easier?!”"
+        }
+    ]
+}
