@@ -100,7 +100,9 @@ public class SpinWheel : MonoBehaviour
         confirmPlayContainer.SetActive(false);
         questionContainer.SetActive(true);
         GameObject.Find("QuestionTheme").GetComponent<Text>().text = currentWheelPiece;
-        GameObject.Find("Question").GetComponent<Text>().text = this.currentQuestion.question;
+        Text question = GameObject.Find("Question").GetComponent<Text>();
+        question.resizeTextForBestFit = true;
+        question.text = this.currentQuestion.question;
         timer.text = timerValue.ToString();
         StartCoroutine(RunTimer());
     }
@@ -112,13 +114,13 @@ public class SpinWheel : MonoBehaviour
                 question = this.questionManager.GetReadingQuestion();
             break;
             case "Writing":
-                question = this.questionManager.GetReadingQuestion();
+                question = this.questionManager.GetWritingQuestion();
             break;
             case "Speaking":
-                question = this.questionManager.GetReadingQuestion();
+                question = this.questionManager.GetSpeakingQuestion();
             break;
             case "Listening":
-                question = this.questionManager.GetReadingQuestion();
+                question = this.questionManager.GetListeningQuestion();
             break;
         }
         return question;
@@ -130,7 +132,7 @@ public class SpinWheel : MonoBehaviour
             yield return new WaitForSeconds(1f);
             timerValue --;
             if(timerValue < 7){
-                color = Color.yellow;
+                color = Color.green;
             }
             if(timerValue < 4){
                 color = Color.red;
@@ -141,10 +143,6 @@ public class SpinWheel : MonoBehaviour
         timeupContainer.SetActive(true);
     }
 
-    private void FormulateQuestion(){
-
-    }
-
     private void ChangeTimerDisplay(Color color){
         timer.color = color;
         timer.text = timerValue.ToString();
@@ -153,6 +151,9 @@ public class SpinWheel : MonoBehaviour
     public void ShowAnswer(){
         timeupContainer.SetActive(false);
         answerContainer.SetActive(true);
+        Text answer = GameObject.Find("Answer").GetComponent<Text>();
+        answer.resizeTextForBestFit = true;
+        answer.text = this.currentQuestion.answer;
         GameObject.Find("RightOrWrong").GetComponent<Text>().text = "Did " + GameManager.teams[GameManager.currentTeamID].teamName + " get it right?";
         timerValue = 10f;
     }

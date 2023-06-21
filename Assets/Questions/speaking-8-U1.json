@@ -1,10 +1,12 @@
 {
     "Question" : [
         {
-            "question" : "Briefly tell the rest of the class about your favorite school subject (which one is it? Why do you like it? Do you get good grades?). Pronunciation and grammar are considered."
+            "question" : "Briefly tell the rest of the class about your favorite school subject (which one is it? Why do you like it? Do you get good grades?). Pronunciation and grammar are considered.",
+            "answer" : "Ok!"
         },
         {
-            "question" : "Briefly tell the rest of the class about your least favorite school subject (Which one is it? Why do you dislike it? Do you get bad grades?). Pronunciation and grammar are considered."
+            "question" : "Briefly tell the rest of the class about your least favorite school subject (Which one is it? Why do you dislike it? Do you get bad grades?). Pronunciation and grammar are considered.",
+            "answer" : "Ok!"
         }
     ]
 }
