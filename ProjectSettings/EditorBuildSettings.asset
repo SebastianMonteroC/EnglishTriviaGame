@@ -6,15 +6,18 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/TeamPicker.unity
-    guid: ba1379bb1085aec469df3bb0912e1bbf
-  - enabled: 1
-    path: Assets/Scenes/WheelScreen.unity
-    guid: 2433350e10feed149ad207b92b8f8d14
-  - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: 43dc884c345dac648ab4c0c763fb5d24
   - enabled: 1
     path: Assets/Scenes/SettingsMenu.unity
     guid: 06b14e9cdbd71bf4c915f7758a0fde41
+  - enabled: 1
+    path: Assets/Scenes/LevelPicker.unity
+    guid: 02e17686fc032f24f877c1f82bc3bae8
+  - enabled: 1
+    path: Assets/Scenes/TeamPicker.unity
+    guid: ba1379bb1085aec469df3bb0912e1bbf
+  - enabled: 1
+    path: Assets/Scenes/WheelScreen.unity
+    guid: 2433350e10feed149ad207b92b8f8d14
   m_configObjects: {}

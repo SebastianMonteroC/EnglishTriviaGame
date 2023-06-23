@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class MainMenu : MonoBehaviour
 {
     public void NewGame() {
-        SceneManager.LoadScene("TeamPicker");
+        SceneManager.LoadScene("LevelPicker");
     }
 
     public void QuitGame() {

@@ -29,6 +29,9 @@ public class SetGame : MonoBehaviour
         teamList = new List<Team>();
         pointsToWin = 5;
         pointsText.text = "Points to win: " + pointsToWin.ToString();
+
+        GameObject.Find("Grade").GetComponent<Text>().text += "Grade: " + GameManager.grade + "th grade";
+        GameObject.Find("Unit").GetComponent<Text>().text += "Unit: " + GameManager.unit;
     }
 
     void Update() {
@@ -100,12 +103,6 @@ public class SetGame : MonoBehaviour
         addPointsButton.interactable = pointsToWin == 10 ? false : true;
     }
 
-    public void TestSetGame() {
-        GameManager.unit = "1";
-        GameManager.grade = "8";
-        StartGame();
-    }
-
     public void StartGame() {
         GameManager.pointsToWin = this.pointsToWin;
         SceneManager.LoadScene("WheelScreen");
@@ -123,6 +120,6 @@ public class SetGame : MonoBehaviour
 
     public void BackToMenu() {
         GameManager.teams.Clear();
-        SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene("LevelPicker");
     }
 }
