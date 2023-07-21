@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
     public static List<Team> teams = new List<Team>();
     public static int currentTeamID;
     public static int pointsToWin;
+    public static int time;
+    public static bool timerEnabled;
     public static bool winner;
     public static string unit;
     public static string grade;

@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class Settings : MonoBehaviour
 {
     public void MainMenu() {
+        SoundManager.Instance.PlaySFX("backButton");
         SceneManager.LoadScene("MainMenu");
     }
 }

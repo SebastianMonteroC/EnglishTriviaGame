@@ -9,13 +9,12 @@ public class SetGame : MonoBehaviour
 {
     private List<Team> teamList;
     private int pointsToWin;
+    private int timerSeconds;
+    private bool timerEnabled;
     public Text pointsText;
     public InputField inputField;
-    public Button addTeamButton;
-    public Button undoTeamButton;
-    public Button addPointsButton;
-    public Button subtractPointsButton;
-    public Button startButton;
+    public GameObject timerSetting;
+    public Button addTeamButton, undoTeamButton, addPointsButton, subtractPointsButton, startButton, addSeconds, subtractSeconds;
 
     void Start() {
         GameManager.teams.Clear();
@@ -26,8 +25,13 @@ public class SetGame : MonoBehaviour
         subtractPointsButton = GameObject.Find("LowerPoints").GetComponent<Button>();
         pointsText = GameObject.Find("PointsToWin").GetComponent<Text>();
         startButton = GameObject.Find("StartGame").GetComponent<Button>();
+        addSeconds = GameObject.Find("HigherSecs").GetComponent<Button>();
+        subtractSeconds = GameObject.Find("LowerSecs").GetComponent<Button>();
+        timerSetting = GameObject.Find("TimerAmount");
+        timerEnabled = true;
         teamList = new List<Team>();
         pointsToWin = 5;
+        timerSeconds = 10;
         pointsText.text = "Points to win: " + pointsToWin.ToString();
 
         GameObject.Find("Grade").GetComponent<Text>().text += "Grade: " + GameManager.grade + "th grade";
@@ -40,6 +44,7 @@ public class SetGame : MonoBehaviour
 
     public void AddNewTeam() {
         GameManager.teams.Add(new Team(inputField.text));
+        SoundManager.Instance.PlaySFX("addTeam");
         RefreshTeamListScreen();
     }
 
@@ -57,16 +62,6 @@ public class SetGame : MonoBehaviour
         teamlistText.text = GenerateTeamList();
         GameObject.Find("TeamsAddedCount").GetComponent<Text>().text = "Teams added: " + GameManager.teams.Count;
         switch(GameManager.teams.Count) {
-            case > 7:
-                teamlistText.fontSize = 40;
-                GameObject.Find("MinMaxText").GetComponent<Text>().text = "Max amount of teams reached! (8)";
-                break;
-            case > 6:
-                teamlistText.fontSize = 40;
-                break;
-            case > 5:
-                teamlistText.fontSize = 50;
-                break;
             case > 4:
                 teamlistText.fontSize = 60;
                 break;
@@ -89,26 +84,35 @@ public class SetGame : MonoBehaviour
     
     public void UndoLastAdded() {
         GameManager.teams.RemoveAt(GameManager.teams.Count - 1);
+        SoundManager.Instance.PlaySFX("removeTeam");
         RefreshTeamListScreen();
     }
 
     public void ButtonCheck() {
         //Check the add team button: if there is no text in the inputfield, the button is non interactable
-        addTeamButton.interactable = inputField.text.Length > 0 && GameManager.teams.Count < 8 ? true : false;
+        addTeamButton.interactable = inputField.text.Length > 0 && GameManager.teams.Count < 4 ? true : false;
         startButton.interactable = GameManager.teams.Count >= 2 ? true : false;
         undoTeamButton.interactable = GameManager.teams.Count > 0 ? true : false;
 
         //Check the add/subtract points to win buttons to put a cap on the amount of points
         subtractPointsButton.interactable = pointsToWin == 3 ? false : true;
         addPointsButton.interactable = pointsToWin == 10 ? false : true;
+
+        //Check the add/subtract seconds to timer buttons to put a cap on the amount of seconds
+        subtractSeconds.interactable = timerSeconds == 10 ? false : true;
+        addSeconds.interactable = timerSeconds == 30 ? false : true;
     }
 
     public void StartGame() {
         GameManager.pointsToWin = this.pointsToWin;
+        GameManager.timerEnabled = this.timerEnabled;
+        GameManager.time = this.timerSeconds;
+        SoundManager.Instance.PlaySFX("beginGame");
         SceneManager.LoadScene("WheelScreen");
     }
 
     public void changePointAmount(bool add){ //where true is add and false is subtract
+        SoundManager.Instance.PlaySFX("settingArrow");
         if(add){
             pointsToWin++;
         }
@@ -118,8 +122,33 @@ public class SetGame : MonoBehaviour
         pointsText.text = "Points to win: " + pointsToWin.ToString();
     }
 
+    public void changeSecondsAmount(bool add){ //where true is add and false is subtract
+        SoundManager.Instance.PlaySFX("settingArrow");
+        if(add){
+            timerSeconds++;
+        }
+        else{
+            timerSeconds--;
+        }
+        timerSetting.GetComponent<Text>().text = "Timer duration: " + timerSeconds.ToString() + " secs";
+    }
+
+    public void ToggleTimer() {
+        SoundManager.Instance.PlaySFX("settingArrow");
+        Toggle timerToggle = GameObject.Find("Toggle").GetComponent<Toggle>();
+        if(timerToggle.isOn){
+            timerEnabled = true;
+            timerSetting.SetActive(true);
+        } else {
+            timerEnabled = false;
+            timerSetting.SetActive(false);
+        }
+
+    }
+
     public void BackToMenu() {
         GameManager.teams.Clear();
+        SoundManager.Instance.PlaySFX("backButton");
         SceneManager.LoadScene("LevelPicker");
     }
 }

@@ -16,6 +16,7 @@ public class LevelSelector : MonoBehaviour
     }
 
     public void BackToMenu() {
+        SoundManager.Instance.PlaySFX("backButton");
         GameManager.teams.Clear();
         SceneManager.LoadScene("MainMenu");
     }
@@ -35,6 +36,7 @@ public class LevelSelector : MonoBehaviour
         GameManager.grade = grade.ToString();
         GameObject arrow = GameObject.Find(grade.ToString() + "thGradeArrow");
         if(isUnitSelectionActive) {
+            SoundManager.Instance.PlaySFX("openGrade");
             unitSelection.SetActive(isUnitSelectionActive);
             int[] colors = GetColor(grade);
             SetUnitButtonColors(colors[0], colors[1], colors[2]);
@@ -44,6 +46,7 @@ public class LevelSelector : MonoBehaviour
                 90
             );
         } else {
+            SoundManager.Instance.PlaySFX("closeGrade");
             arrow.transform.eulerAngles = new Vector3(
                 arrow.transform.eulerAngles.x,
                 arrow.transform.eulerAngles.y,
@@ -78,6 +81,7 @@ public class LevelSelector : MonoBehaviour
 
     public void UnitSelected(int unit) {
         GameManager.unit = unit.ToString();
+        SoundManager.Instance.PlaySFX("unitChosen");
         SceneManager.LoadScene("TeamPicker");
     }
 }
