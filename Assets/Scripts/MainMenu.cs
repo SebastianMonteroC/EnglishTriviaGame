@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
+
     public void NewGame() {
         SoundManager.Instance.PlaySFX("newGame");
         SceneManager.LoadScene("LevelPicker");

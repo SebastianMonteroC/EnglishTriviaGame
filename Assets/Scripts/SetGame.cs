@@ -62,11 +62,9 @@ public class SetGame : MonoBehaviour
         teamlistText.text = GenerateTeamList();
         GameObject.Find("TeamsAddedCount").GetComponent<Text>().text = "Teams added: " + GameManager.teams.Count;
         switch(GameManager.teams.Count) {
-            case > 4:
-                teamlistText.fontSize = 60;
-                break;
             case > 3:
                 teamlistText.fontSize = 65;
+                GameObject.Find("MinMaxText").GetComponent<Text>().text = "A maximum of 4 teams is allowed!";
                 break;
             case > 2:
                 teamlistText.fontSize = 70;
