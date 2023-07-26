@@ -636,7 +636,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &553759378
 RectTransform:
   m_ObjectHideFlags: 0
@@ -715,7 +715,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &585328136
 RectTransform:
   m_ObjectHideFlags: 0
@@ -759,7 +759,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &637767352
 RectTransform:
   m_ObjectHideFlags: 0
@@ -969,7 +969,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &717315407
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1366,7 +1366,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &898534423
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1994,7 +1994,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1208980233
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2936,7 +2936,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1553649081
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3645,7 +3645,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1844186186
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3988,6 +3988,27 @@ MonoBehaviour:
   spinButtonUI: {fileID: 1894556662}
   spinButtonText: {fileID: 743603524}
   wheel: {fileID: 1865430072}
+  GameManagerObject: {fileID: 1926073860}
+  interactionBox: {fileID: 553759377}
+  questionContainer: {fileID: 717315406}
+  timeupContainer: {fileID: 1844186185}
+  confirmPlayContainer: {fileID: 1553649080}
+  answerContainer: {fileID: 585328135}
+  winnerContainer: {fileID: 2125435410}
+  timerContainer: {fileID: 375620531}
+  listeningContainer: {fileID: 898534422}
+  playAudio: {fileID: 1208980232}
+  stopAudio: {fileID: 637767351}
+  learningAbility: {fileID: 1753259519}
+  playButton: {fileID: 340677266}
+  questionAbility: {fileID: 1753259519}
+  question: {fileID: 1336052586}
+  timer: {fileID: 349958964}
+  noTimerAnswer: {fileID: 1494707453}
+  ListeningImage: {fileID: 1814208265}
+  SpeakingImage: {fileID: 459213092}
+  ReadingImage: {fileID: 1779114507}
+  WritingImage: {fileID: 1222708559}
 --- !u!82 &1865430075 stripped
 AudioSource:
   m_CorrespondingSourceObject: {fileID: 82771466526599974, guid: 160be82451391f6448834ec65286e007, type: 3}
@@ -4334,7 +4355,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2125435411
 RectTransform:
   m_ObjectHideFlags: 0

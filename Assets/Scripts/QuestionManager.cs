@@ -5,7 +5,8 @@ using Random = System.Random;
 using UnityEngine;
 
 public class QuestionManager {
-    public string assetsFolder = Application.dataPath + "/Questions/";
+    public string assetsFolder = Application.streamingAssetsPath + "/Questions/";
+    public string listeningAssetsFolder = Application.streamingAssetsPath + "/ListeningFiles/";
     //Speaking
     public string speakingFile = "speaking-{GRADE}-U{X}.json";
     public List<Question> speakingQuestions;
@@ -33,7 +34,6 @@ public class QuestionManager {
     }
 
     void SetFileNames(string gradeNumber, string unitNumber) {
-        Debug.Log(gradeNumber + " " + unitNumber);
         this.speakingFile = this.speakingFile.Replace("{GRADE}",gradeNumber);
         this.speakingFile = this.speakingFile.Replace("{X}",unitNumber);
         this.readingFile = this.readingFile.Replace("{GRADE}",gradeNumber);
@@ -61,7 +61,7 @@ public class QuestionManager {
             Debug.LogError("Failed to parse JSON data or no questions found!");
         }
         if (questionList.Count == 0) {
-            Debug.LogError("cock");
+            Debug.LogError("No questions loaded.");
         }
         return questionList;
     }
@@ -140,4 +140,5 @@ public class Question
 {
     public string question;
     public string answer;
+    public string path;
 }

@@ -11,33 +11,41 @@ public class SpinWheel : MonoBehaviour
     [SerializeField] private Text spinButtonText;
     [SerializeField] private PickerWheel wheel;
     
-    private GameObject GameManagerObject;
+    [SerializeField] private GameObject GameManagerObject;
 
     private string currentWheelPiece;
-    private GameObject interactionBox;
+    [SerializeField] private GameObject interactionBox;
 
     //containers
-    private GameObject questionContainer;
-    private GameObject timeupContainer;
-    private GameObject confirmPlayContainer;
-    private GameObject answerContainer;
-    private GameObject winnerContainer;
-    private GameObject timerContainer;
-    private GameObject listeningContainer;
-    private GameObject playAudio;
-    private GameObject stopAudio;
+    
+    [SerializeField] private GameObject questionContainer;
+    [SerializeField] private GameObject timeupContainer;
+    [SerializeField] private GameObject confirmPlayContainer;
+    [SerializeField] private GameObject answerContainer;
+    [SerializeField] private GameObject winnerContainer;
+    [SerializeField] private GameObject timerContainer;
+    [SerializeField] private GameObject listeningContainer;
+    [SerializeField] private GameObject playAudio;
+    [SerializeField] private GameObject stopAudio;
 
     //Play box displayed after spinning the wheel
-    private Text learningAbility;
-    private Button playButton;
+    [SerializeField] private Text learningAbility;
+    [SerializeField] private Button playButton;
 
     //question box displayed after pressing "play"
-    private Text questionAbility;
-    private Text question;
-    private Text timer;
+    [SerializeField] private Text questionAbility;
+    [SerializeField] private Text question;
+    [SerializeField] private Text timer;
+    [SerializeField] private GameObject noTimerAnswer;
+
+    [SerializeField] private Image ListeningImage;
+    [SerializeField] private Image SpeakingImage;
+    [SerializeField] private Image ReadingImage;
+    [SerializeField] private Image WritingImage;
+
     private float timerValue;
     private bool timerOn;
-    private GameObject noTimerAnswer;
+    
 
     //Question Loader
     private QuestionManager questionManager;
@@ -45,50 +53,21 @@ public class SpinWheel : MonoBehaviour
 
     private void Start(){
         timerValue = GameManager.time;
-        GameManagerObject = GameObject.Find("GameManager");
         spinButtonUI.onClick.AddListener(Spin);
-
-        interactionBox = GameObject.Find("InteractionBox");
-
-        confirmPlayContainer = GameObject.Find("ConfirmPlayContainer");
-        playButton = GameObject.Find("PlayButton").GetComponent<Button>();
-        learningAbility = GameObject.Find("Theme").GetComponent<Text>();
         
-        GameObject.Find("ListeningImage").GetComponent<Image>().enabled = false;
-        GameObject.Find("SpeakingImage").GetComponent<Image>().enabled = false;
-        GameObject.Find("ReadingImage").GetComponent<Image>().enabled = false;
-        GameObject.Find("WritingImage").GetComponent<Image>().enabled = false;
-
-        questionContainer = GameObject.Find("QuestionContainer");
-        listeningContainer = GameObject.Find("ListeningContainer");
-        playAudio = GameObject.Find("PlayAudio");
-        stopAudio = GameObject.Find("StopAudio");
-
-        noTimerAnswer = GameObject.Find("NoTimerAnswer");
-        noTimerAnswer.SetActive(false);
-        questionAbility = GameObject.Find("Theme").GetComponent<Text>();
-        timer = GameObject.Find("Timer").GetComponent<Text>();
-        question = GameObject.Find("Question").GetComponent<Text>();
-        timerContainer = GameObject.Find("TimeContainer");
-
-        timeupContainer = GameObject.Find("TimeUpContainer");
-
-        answerContainer = GameObject.Find("AnswerContainer");
-
-        winnerContainer = GameObject.Find("WinnerContainer");
-
-        timeupContainer.SetActive(false);
-        questionContainer.SetActive(false);
-        confirmPlayContainer.SetActive(false);
-        answerContainer.SetActive(false);
-        winnerContainer.SetActive(false);
-        listeningContainer.SetActive(false);
-        playAudio.SetActive(false);
-        stopAudio.SetActive(false);
-
-        interactionBox.SetActive(false);
+        ListeningImage.enabled = false;
+        SpeakingImage.enabled = false;
+        ReadingImage.enabled = false;
+        WritingImage.enabled = false;
 
         questionManager = new QuestionManager(GameManager.grade, GameManager.unit);
+        // string fileBase = "listening-{GRADE}-U{X}-{#}";
+        // fileBase = fileBase.Replace("{GRADE}",GameManager.grade);
+        // fileBase = fileBase.Replace("{X}",GameManager.unit);
+        // //for(int i = 0; i < 15; i++) { //amount of questions rather than 15 quemados
+        //     yield return SoundManager.Instance.LoadAudio(fileBase.Replace("{#}","0"));
+        // //}
+        //  TO DO: terminar lo de audio!
     }
 
     private void Spin(){
@@ -117,7 +96,6 @@ public class SpinWheel : MonoBehaviour
         GameObject.Find(currentWheelPiece + "Image").GetComponent<Image>().enabled = false;
         confirmPlayContainer.SetActive(false);
         questionContainer.SetActive(true);
-        listeningContainer.SetActive(true);
         GameObject.Find("QuestionTheme").GetComponent<Text>().text = currentWheelPiece;
         Text question = GameObject.Find("Question").GetComponent<Text>();
         question.resizeTextForBestFit = true;
@@ -125,6 +103,7 @@ public class SpinWheel : MonoBehaviour
         timer.text = timerValue.ToString();
         
         if(currentWheelPiece == "Listening") {
+            listeningContainer.SetActive(true);
             playAudio.SetActive(true);
             timerContainer.SetActive(false);
             noTimerAnswer.SetActive(true);
@@ -145,15 +124,19 @@ public class SpinWheel : MonoBehaviour
         switch(category) {
             case "Reading":
                 question = this.questionManager.GetReadingQuestion();
+                Debug.Log("path is: " + question.path);
             break;
             case "Writing":
                 question = this.questionManager.GetWritingQuestion();
+                Debug.Log("path is: " + question.path);
             break;
             case "Speaking":
                 question = this.questionManager.GetSpeakingQuestion();
+                Debug.Log("path is: " + question.path);
             break;
             case "Listening":
                 question = this.questionManager.GetListeningQuestion();
+                Debug.Log("path is: " + question.path);
             break;
         }
         return question;
