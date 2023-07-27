@@ -634,6 +634,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1450865846}
   - component: {fileID: 1450865845}
+  - component: {fileID: 1450865847}
   m_Layer: 0
   m_Name: SoundManager
   m_TagString: Untagged
@@ -690,6 +691,8 @@ MonoBehaviour:
     audio: {fileID: 8300000, guid: c999077406721b94fb9d3c1815c24306, type: 3}
   - name: timerTick
     audio: {fileID: 8300000, guid: b59e1562580b14f438db55df988e16b2, type: 3}
+  unitListeningSounds: []
+  importer: {fileID: 1450865847}
   sfxSource: {fileID: 1957186735}
 --- !u!4 &1450865846
 Transform:
@@ -707,6 +710,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1450865847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1450865844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c85ca24aed0de7f4bb834c92b727d65b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1479484496
 GameObject:
   m_ObjectHideFlags: 0

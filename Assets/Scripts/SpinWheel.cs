@@ -45,7 +45,6 @@ public class SpinWheel : MonoBehaviour
 
     private float timerValue;
     private bool timerOn;
-    
 
     //Question Loader
     private QuestionManager questionManager;
@@ -61,13 +60,7 @@ public class SpinWheel : MonoBehaviour
         WritingImage.enabled = false;
 
         questionManager = new QuestionManager(GameManager.grade, GameManager.unit);
-        // string fileBase = "listening-{GRADE}-U{X}-{#}";
-        // fileBase = fileBase.Replace("{GRADE}",GameManager.grade);
-        // fileBase = fileBase.Replace("{X}",GameManager.unit);
-        // //for(int i = 0; i < 15; i++) { //amount of questions rather than 15 quemados
-        //     yield return SoundManager.Instance.LoadAudio(fileBase.Replace("{#}","0"));
-        // //}
-        //  TO DO: terminar lo de audio!
+        LoadListeningAudios();
     }
 
     private void Spin(){
@@ -141,7 +134,7 @@ public class SpinWheel : MonoBehaviour
         }
         return question;
     }
-    
+
     private IEnumerator RunTimer(){
         Color color = Color.black;
         SoundManager.Instance.PlaySFX("timerTick");
@@ -219,10 +212,21 @@ public class SpinWheel : MonoBehaviour
     public void PlayAudio(){
         stopAudio.SetActive(true);
         playAudio.SetActive(false);
+        SoundManager.Instance.PlayListeningAudio(currentQuestion.path);
     }
 
     public void StopAudio(){
         stopAudio.SetActive(false);
         playAudio.SetActive(true);
+        SoundManager.Instance.StopSFX();
+    }
+
+    public void LoadListeningAudios() {
+        string fileBase = "listening-{GRADE}-U{X}-{#}";
+        fileBase = fileBase.Replace("{GRADE}", GameManager.grade);
+        fileBase = fileBase.Replace("{X}", GameManager.unit);
+        for(int i = 0; i < questionManager.listeningQuestions.Count; i++) {
+            StartCoroutine(SoundManager.Instance.LoadAudio(fileBase.Replace("{#}", i.ToString())));
+        }
     }
 }

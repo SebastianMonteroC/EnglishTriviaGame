@@ -15,6 +15,7 @@ public class SoundManager : MonoBehaviour
     public static SoundManager Instance;
     public Sound[] sfxSounds;
     public List<Sound> unitListeningSounds;
+    public AudioImporter importer;
     public AudioSource sfxSource;
     private string currentSound;
     
@@ -42,28 +43,26 @@ public class SoundManager : MonoBehaviour
 
     public IEnumerator LoadAudio(string filename)
     {
-        using (UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip("file://" + Application.streamingAssetsPath + "/ListeningFiles/" + filename, AudioType.WAV))
-        {
-            yield return www.SendWebRequest();
+        string path = Application.streamingAssetsPath + "/ListeningFiles/" + filename + ".mp3";
+        importer.Import(path);
 
-            if (www.result == UnityWebRequest.Result.ConnectionError)
-            {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                AudioClip listeningClip = DownloadHandlerAudioClip.GetContent(www);
-                Sound listeningSound = new Sound();
-                listeningSound.name = filename;
-                listeningSound.audio = listeningClip;
-                unitListeningSounds.Add(listeningSound);
-            }
-        }        
+        while (!importer.isInitialized && !importer.isError)
+            yield return null;
+
+        if (importer.isError)
+            Debug.LogError(importer.error);
+
+        AudioClip listeningClip = importer.audioClip;
+        Sound listeningSound = new Sound();
+        listeningSound.name = filename;
+        listeningSound.audio = listeningClip;
+        unitListeningSounds.Add(listeningSound);
     }
 
     public void PlayListeningAudio(string filename) {
         Sound sound = unitListeningSounds.Find(x => x.name == filename);
         if (sound != null) {
+            Debug.Log("playing");
             sfxSource.PlayOneShot(sound.audio);
         }
     }
