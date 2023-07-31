@@ -50,7 +50,7 @@ public abstract class DecoderImporter : AudioImporter
 
     protected override void Import()
     {
-        bufferSize = 2048 * 128;
+        bufferSize = 4096 * 512;
         buffer = new float[bufferSize];
 
         isDone = false;

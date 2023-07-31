@@ -1,9 +1,44 @@
 {
     "Question" : [
         {
-            "question" : " Listen to Daniel's statement and answer the following question: what are the 3 subjects that Daniel dislikes?",
+            "question" : "Listen to Daniel's statement and answer the following question: what are the 3 subjects that Daniel dislikes?",
             "answer" : "Daniel dislikes physical education, art class and music class.",
             "path" : "listening-8-U1-0"
+        },
+        {
+            "question" : "David wants you to draw something for him. Grab a marker and get ready to listen and follow his instructions:",
+            "answer" : "A square with the team's name written inside of it and, to the right, a circle with a triangle inside of it.",
+            "path" : "listening-8-U1-1"
+        },
+        {
+            "question" : "Listen to Mark's opinion on his favorite school activity and answer the following question: What is Mark's favorite school activity?",
+            "answer" : "Mark's favorite school activity is playing basketball.",
+            "path" : "listening-8-U1-2"
+        },
+        {
+            "question" : "Listen to the teacher's instructions for the science experiment. What should the students do first in the science experiment? What materials are necessary?",
+            "answer" : "The students should gather the necessary materials first. These materials are: a test tube and a mixing rod.",
+            "path" : "listening-8-U1-3"
+        },
+        {
+            "question" : "Listen to the teacher's explanation about the upcoming field trip. Where will the students be going for the field trip and at what time?",
+            "answer" : "The students will be visiting the local museum at 9AM.",
+            "path" : "listening-8-U1-4"
+        },
+        {
+            "question" : "Listen to the teacher's instructions for the art project. What should the students do before applying the paint in the art project?",
+            "answer" : "The students should sketch their ideas on the canvas before applying the paint.",
+            "path" : "listening-8-U1-5"
+        },
+        {
+            "question" : "Listen to the teacher's explanation about the upcoming project. What will the students be doing for the upcoming project? Who would you talk about in the presentation?",
+            "answer" : "The students have to talk about a historical figure's life, accomplishments and impact on society.",
+            "path" : "listening-8-U1-6"
+        },
+        {
+            "question" : "Listen to the teacher's instructions for the group project. How many people should be in each group for the project?",
+            "answer" : "Each group should have either 4 students or 6 students if they choose to do extra work.",
+            "path" : "listening-8-U1-7"
         }
     ]
 }

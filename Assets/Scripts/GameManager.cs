@@ -29,17 +29,18 @@ public class GameManager : MonoBehaviour
 
     private void VerifyWin(){
         if(teams[currentTeamID].score == pointsToWin){
-            Debug.Log("The team " + teams[currentTeamID].teamName + " has won");
+            Debug.Log("The team " + teams[currentTeamID].teamName + " has won!!!");
             winner = true;
         }
     }
 
     private void DisplayTeams(){
-        string scoreboard = "";
+        int i = 0;
         foreach(var team in teams){
-            scoreboard += team.teamName + " - " + team.score + "\n";
+            GameObject.Find("TeamName" + i.ToString()).GetComponent<Text>().text = team.teamName;
+            GameObject.Find("TeamScore" + i.ToString()).GetComponent<Text>().text = team.score.ToString();
+            i++;
         }
-        GameObject.Find("Groups").GetComponent<Text>().text = scoreboard;
     }
 
     private void TeamTurn(){

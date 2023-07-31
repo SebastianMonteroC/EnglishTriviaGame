@@ -50,9 +50,13 @@ public class SpinWheel : MonoBehaviour
     private QuestionManager questionManager;
     Question currentQuestion;
 
+    public PowerUp powerUpManager;
+
     private void Start(){
         timerValue = GameManager.time;
         spinButtonUI.onClick.AddListener(Spin);
+        
+        powerUpManager = new PowerUp();
         
         ListeningImage.enabled = false;
         SpeakingImage.enabled = false;
@@ -61,6 +65,10 @@ public class SpinWheel : MonoBehaviour
 
         questionManager = new QuestionManager(GameManager.grade, GameManager.unit);
         LoadListeningAudios();
+
+        foreach(var team in GameManager.teams) {
+            team.powerUps.Add(powerUpManager.GetRegularPowerUp());
+        }
     }
 
     private void Spin(){
@@ -161,6 +169,7 @@ public class SpinWheel : MonoBehaviour
     }
 
     public void ProceedToAnswer(){
+        StopAudio();
         questionContainer.SetActive(false);
         timeupContainer.SetActive(true);
     }
@@ -183,7 +192,7 @@ public class SpinWheel : MonoBehaviour
         }
         else{
             SoundManager.Instance.PlaySFX("wrongAnswer");
-            this.questionManager.ReadingIncorrectAnswer(this.currentQuestion);
+            this.questionManager.ReadingIncorrectAnswer(this.currentQuestion, currentWheelPiece);
         }
 
         answerContainer.SetActive(false);
@@ -225,8 +234,6 @@ public class SpinWheel : MonoBehaviour
         string fileBase = "listening-{GRADE}-U{X}-{#}";
         fileBase = fileBase.Replace("{GRADE}", GameManager.grade);
         fileBase = fileBase.Replace("{X}", GameManager.unit);
-        for(int i = 0; i < questionManager.listeningQuestions.Count; i++) {
-            StartCoroutine(SoundManager.Instance.LoadAudio(fileBase.Replace("{#}", i.ToString())));
-        }
+        StartCoroutine(SoundManager.Instance.LoadAudio(fileBase, questionManager.listeningQuestions.Count));
     }
 }

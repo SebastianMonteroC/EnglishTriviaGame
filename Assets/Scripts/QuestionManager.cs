@@ -30,6 +30,9 @@ public class QuestionManager {
 
     public QuestionManager(string gradeNumber, string unitNumber) {
         wrongReadingQuestions = new List<Question>();
+        wrongSpeakingQuestions = new List<Question>();
+        wrongWritingQuestions = new List<Question>();
+        wrongListeningQuestions = new List<Question>();
         SetFileNames(gradeNumber, unitNumber);
         LoadQuestions();
     }
@@ -72,10 +75,11 @@ public class QuestionManager {
         Question reading = new Question();
         int randomIndex;
         if (this.readingQuestions.Count > 0) {
-            randomIndex = random.Next(0,readingQuestions.Count-1);
+            randomIndex = random.Next(0, readingQuestions.Count);
             reading = this.readingQuestions[randomIndex];
+            readingQuestions.Remove(reading);
         } else {
-            randomIndex = random.Next(0,wrongReadingQuestions.Count);
+            randomIndex = random.Next(0, wrongReadingQuestions.Count);
             reading = this.wrongReadingQuestions[randomIndex];
         }
         return reading;
@@ -86,8 +90,9 @@ public class QuestionManager {
         Question writing = new Question();
         int randomIndex;
         if (this.writingQuestions.Count > 0) {
-            randomIndex = random.Next(0, writingQuestions.Count-1);
+            randomIndex = random.Next(0, writingQuestions.Count);
             writing = this.writingQuestions[randomIndex];
+            writingQuestions.Remove(writing);
         } else {
             randomIndex = random.Next(0, wrongWritingQuestions.Count);
             writing = this.wrongWritingQuestions[randomIndex];
@@ -100,8 +105,9 @@ public class QuestionManager {
         Question speaking = new Question();
         int randomIndex;
         if (this.speakingQuestions.Count > 0) {
-            randomIndex = random.Next(0, speakingQuestions.Count-1);
+            randomIndex = random.Next(0, speakingQuestions.Count);
             speaking = this.speakingQuestions[randomIndex];
+            speakingQuestions.Remove(speaking);
         } else {
             randomIndex = random.Next(0, wrongSpeakingQuestions.Count);
             speaking = this.wrongSpeakingQuestions[randomIndex];
@@ -114,8 +120,9 @@ public class QuestionManager {
         Question listening = new Question();
         int randomIndex;
         if (this.listeningQuestions.Count > 0) {
-            randomIndex = random.Next(0, listeningQuestions.Count-1);
+            randomIndex = random.Next(0, listeningQuestions.Count);
             listening = this.listeningQuestions[randomIndex];
+            listeningQuestions.Remove(listening);
         } else {
             randomIndex = random.Next(0, wrongListeningQuestions.Count);
             listening = this.wrongListeningQuestions[randomIndex];
@@ -123,9 +130,28 @@ public class QuestionManager {
         return listening;
     }
 
-    public void ReadingIncorrectAnswer(Question question) {
-        if (!this.wrongReadingQuestions.Exists(item => item.question == question.question)) {
-            this.wrongReadingQuestions.Add(question);
+    public void ReadingIncorrectAnswer(Question question, string category) {
+        switch (category) {
+            case "Reading":
+                if (!this.wrongReadingQuestions.Exists(item => item.question == question.question)) {
+                    this.wrongReadingQuestions.Add(question);
+                }
+            break;
+            case "Speaking":
+                if (!this.wrongSpeakingQuestions.Exists(item => item.question == question.question)) {
+                    this.wrongSpeakingQuestions.Add(question);
+                }
+            break;
+            case "Writing":
+                if (!this.wrongWritingQuestions.Exists(item => item.question == question.question)) {
+                        this.wrongWritingQuestions.Add(question);
+                }
+            break;
+            case "Listening":
+                if (!this.wrongListeningQuestions.Exists(item => item.question == question.question)) {
+                        this.wrongListeningQuestions.Add(question);
+                }
+            break;
         }
     }
 }

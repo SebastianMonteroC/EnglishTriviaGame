@@ -41,22 +41,25 @@ public class SoundManager : MonoBehaviour
         sfxSource.Stop();
     }
 
-    public IEnumerator LoadAudio(string filename)
+    public IEnumerator LoadAudio(string filename, int count)
     {
-        string path = Application.streamingAssetsPath + "/ListeningFiles/" + filename + ".mp3";
-        importer.Import(path);
+        for(int i = 0; i < count; i++) {
+            string i_filename = filename.Replace("{#}", i.ToString());
+            string path = Application.streamingAssetsPath + "/ListeningFiles/" + i_filename + ".mp3";
+            importer.Import(path);
 
-        while (!importer.isInitialized && !importer.isError)
-            yield return null;
+            while (!importer.isInitialized && !importer.isError)
+                yield return null;
 
-        if (importer.isError)
-            Debug.LogError(importer.error);
+            if (importer.isError)
+                Debug.LogError(importer.error);
 
-        AudioClip listeningClip = importer.audioClip;
-        Sound listeningSound = new Sound();
-        listeningSound.name = filename;
-        listeningSound.audio = listeningClip;
-        unitListeningSounds.Add(listeningSound);
+            AudioClip listeningClip = importer.audioClip;
+            Sound listeningSound = new Sound();
+            listeningSound.name = i_filename;
+            listeningSound.audio = listeningClip;
+            unitListeningSounds.Add(listeningSound);
+        }
     }
 
     public void PlayListeningAudio(string filename) {
