@@ -16,8 +16,7 @@ public class SpinWheel : MonoBehaviour
     private string currentWheelPiece;
     [SerializeField] private GameObject interactionBox;
 
-    //containers
-    
+    //Interaction Containers
     [SerializeField] private GameObject questionContainer;
     [SerializeField] private GameObject timeupContainer;
     [SerializeField] private GameObject confirmPlayContainer;
@@ -38,26 +37,31 @@ public class SpinWheel : MonoBehaviour
     [SerializeField] private Text timer;
     [SerializeField] private GameObject noTimerAnswer;
 
+    //images
     [SerializeField] private Image ListeningImage;
     [SerializeField] private Image SpeakingImage;
     [SerializeField] private Image ReadingImage;
     [SerializeField] private Image WritingImage;
 
+    //timer
     private float timerValue;
     private bool timerOn;
 
     //Question Loader
     private QuestionManager questionManager;
-    Question currentQuestion;
+    private Question currentQuestion;
 
-    public PowerUp powerUpManager;
+    //power ups
+    [SerializeField] private GameObject powerUpTable;
+    [SerializeField] private GameObject powerUp1;
+    [SerializeField] private GameObject powerUp2;
+    [SerializeField] private GameObject powerUp3;
+    [SerializeField] private GameObject NoPowerUpText;
 
     private void Start(){
         timerValue = GameManager.time;
         spinButtonUI.onClick.AddListener(Spin);
-        
-        powerUpManager = new PowerUp();
-        
+                
         ListeningImage.enabled = false;
         SpeakingImage.enabled = false;
         ReadingImage.enabled = false;
@@ -65,13 +69,10 @@ public class SpinWheel : MonoBehaviour
 
         questionManager = new QuestionManager(GameManager.grade, GameManager.unit);
         LoadListeningAudios();
-
-        foreach(var team in GameManager.teams) {
-            team.powerUps.Add(powerUpManager.GetRegularPowerUp());
-        }
+        GameManagerObject.GetComponent<GameManager>().StartGamePowerUps();
     }
 
-    private void Spin(){
+    private void Spin() {
         SoundManager.Instance.PlaySFX("wheelButton");
         spinButtonUI.interactable = false;
         spinButtonText.text = "Spinning";
@@ -181,7 +182,7 @@ public class SpinWheel : MonoBehaviour
         Text answer = GameObject.Find("Answer").GetComponent<Text>();
         answer.resizeTextForBestFit = true;
         answer.text = this.currentQuestion.answer;
-        GameObject.Find("RightOrWrong").GetComponent<Text>().text = "Did " + GameManager.teams[GameManager.currentTeamID].teamName + " get it right?";
+        GameObject.Find("RightOrWrong").GetComponent<Text>().text = "Did " + GameManager.teams[GameManager.currentTeamId].teamName + " get it right?";
         timerValue = GameManager.time;
     }
 
@@ -197,19 +198,34 @@ public class SpinWheel : MonoBehaviour
 
         answerContainer.SetActive(false);
         if(!GameManager.winner){
-            GameManagerObject.GetComponent<GameManager>().TurnChange();
-            interactionBox.SetActive(false);
-            spinButtonUI.interactable = true;
-            spinButtonText.text = "Spin!";
+            TeamTurnChange();
         }
         else{
             ShowWinnerScreen();
         }
     }
 
+    private void TeamTurnChange() {
+        GameManagerObject.GetComponent<GameManager>().TurnChange();
+        interactionBox.SetActive(false);
+        spinButtonUI.interactable = true;
+        spinButtonText.text = "Spin!";
+    }
+
+    private void LoadTeamPowerUps() {
+        List<string> powerUps = GameManagerObject.GetComponent<GameManager>().GetCurrentTeamsPowerUps();
+        if(powerUps.Count == 0) {
+            NoPowerUpText.SetActive(true);
+            powerUpTable.SetActive(false);
+        } else {
+            NoPowerUpText.SetActive(false);
+            powerUpTable.SetActive(true);
+        }
+    }
+
     private void ShowWinnerScreen(){
         winnerContainer.SetActive(true);
-        GameObject.Find("WinnerTitle").GetComponent<Text>().text = GameManager.teams[GameManager.currentTeamID].teamName + " wins!";
+        GameObject.Find("WinnerTitle").GetComponent<Text>().text = GameManager.teams[GameManager.currentTeamId].teamName + " wins!";
     }
 
     public void BackToMainMenu(){
