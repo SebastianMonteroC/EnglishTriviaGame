@@ -19,6 +19,10 @@ public class GameManager : MonoBehaviour
     public static string grade;
     private int turnCounter;
 
+    public bool doublePointsActive = false;
+    public bool triplePointsActive = false;
+
+
     public void Start(){
         currentTeamId = 0;
         winner = false;
@@ -26,7 +30,15 @@ public class GameManager : MonoBehaviour
     }
 
     public void AddPoint(){
-        teams[currentTeamId].score++;
+        if(doublePointsActive) {
+            teams[currentTeamId].score += 2;
+            doublePointsActive = false;
+        } else if (triplePointsActive) {
+            teams[currentTeamId].score += 3;
+            triplePointsActive = false;
+        } else {
+            teams[currentTeamId].score++;
+        }
         Debug.Log("The team " + teams[currentTeamId].teamName + " has " + teams[currentTeamId].score + " points.");
         VerifyWin();
     }
@@ -52,6 +64,13 @@ public class GameManager : MonoBehaviour
     }
 
     private void TeamTurn(){
+        if(currentTeamId == 0) {
+            turnCounter++;
+            if(turnCounter % 3 == 0) {
+                GrantPowerUps();
+            }
+        }
+
         DisplayTeams();
 
         string team = teams[currentTeamId].teamName;
@@ -82,8 +101,10 @@ public class GameManager : MonoBehaviour
 
     private void GrantPowerUps() {
         List<Team> teamPlacements = GameManager.teams.OrderByDescending(o => o.score).ToList();
+        Debug.Log("teams: " + teamPlacements.Count.ToString());
         int powerUpsGranted = 0;
         foreach(var team in GameManager.teams) {
+            Debug.Log("Giving " + team.teamName + " power up");
             if(team.powerUps.Count < 3) {
                 if(powerUpsGranted == GameManager.teams.Count-1) {
                     team.powerUps.Add(powerUpManager.GetHandicapPowerUp());
@@ -91,6 +112,8 @@ public class GameManager : MonoBehaviour
                     team.powerUps.Add(powerUpManager.GetRegularPowerUp());
                 }
             }
+            powerUpsGranted++;
+            Debug.Log(team.teamName + "power ups: " + team.powerUps);
         }
     }
 
