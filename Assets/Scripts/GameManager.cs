@@ -21,9 +21,12 @@ public class GameManager : MonoBehaviour
 
     public bool doublePointsActive = false;
     public bool triplePointsActive = false;
+    public List<string> sabotages;
+    public static bool sabotageActive = false;
 
 
     public void Start(){
+        sabotages = new List<string>();
         currentTeamId = 0;
         winner = false;
         TeamTurn();
@@ -41,6 +44,22 @@ public class GameManager : MonoBehaviour
         }
         Debug.Log("The team " + teams[currentTeamId].teamName + " has " + teams[currentTeamId].score + " points.");
         VerifyWin();
+    }
+
+    public void RemovePoint() {
+        teams[currentTeamId].score -= 1;
+        sabotages.Remove(teams[currentTeamId].teamName);
+        sabotageActive = false;
+    }
+
+    public void AddSabotage(string name) {
+        sabotages.Add(name);
+    }
+
+    public void StealPoint(string name) {
+        teams.Find(x => x.teamName == name).score -= 1;
+        teams[currentTeamId].score += 1;
+        DisplayTeams();
     }
 
     public List<string> GetCurrentTeamsPowerUps() {
@@ -78,6 +97,11 @@ public class GameManager : MonoBehaviour
 
         itsTeamTurnMessage = team.ToLower().EndsWith("s") ? "It's " + team + "' turn" : "It's " + team + "'s turn";
 
+        if(sabotages.Contains(team)) {
+            sabotageActive = true;
+            sabotages.Remove(team);
+        }
+
         GameObject.Find("TeamTurn").GetComponent<Text>().text = itsTeamTurnMessage;
         GameObject.Find("TurnTitle").GetComponent<Text>().text = "Turn: " + turnCounter.ToString();
     }
@@ -93,7 +117,7 @@ public class GameManager : MonoBehaviour
         teams.Clear();
     }
 
-       public void StartingPowerUps() {
+    public void StartingPowerUps() {
         foreach(var team in GameManager.teams) {
             team.powerUps.Add(powerUpManager.GetRegularPowerUp());
         }

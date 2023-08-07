@@ -6,7 +6,7 @@ using Random = System.Random;
 public class PowerUp
 {
     private static string[] POWER_UPS = {"Double Points", "Change Question", "Re-Spin", "Sabotage"};
-    private static string[] HANDICAP_POWER_UPS = {"Triple Points", "Steal Point", "Sabotage", "Turn Skip"};
+    private static string[] HANDICAP_POWER_UPS = {"Triple Points", "Steal Point", "Sabotage"};
     private static Random random = new Random();
 
     public string GetRegularPowerUp() {

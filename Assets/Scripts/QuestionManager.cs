@@ -71,10 +71,12 @@ public class QuestionManager {
     }
 
     public Question GetReadingQuestion() {
+        Debug.Log("Getting question...");
         Random random = new Random();
         Question reading = new Question();
         int randomIndex;
         if (this.readingQuestions.Count > 0) {
+            Debug.Log("count more than 1");
             randomIndex = random.Next(0, readingQuestions.Count);
             reading = this.readingQuestions[randomIndex];
             readingQuestions.Remove(reading);
@@ -90,6 +92,7 @@ public class QuestionManager {
         Question writing = new Question();
         int randomIndex;
         if (this.writingQuestions.Count > 0) {
+            Debug.Log("count more than 1");
             randomIndex = random.Next(0, writingQuestions.Count);
             writing = this.writingQuestions[randomIndex];
             writingQuestions.Remove(writing);
@@ -105,6 +108,7 @@ public class QuestionManager {
         Question speaking = new Question();
         int randomIndex;
         if (this.speakingQuestions.Count > 0) {
+            Debug.Log("count more than 1");
             randomIndex = random.Next(0, speakingQuestions.Count);
             speaking = this.speakingQuestions[randomIndex];
             speakingQuestions.Remove(speaking);
