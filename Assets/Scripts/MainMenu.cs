@@ -13,6 +13,11 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene("LevelPicker");
     }
 
+    public void Create() {
+        SoundManager.Instance.PlaySFX("settings");
+        SceneManager.LoadScene("QuestionCreator");
+    }
+
     public void QuitGame() {
         Application.Quit();
     }
