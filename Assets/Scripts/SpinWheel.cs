@@ -305,6 +305,7 @@ public class SpinWheel : MonoBehaviour
         List<string> powerUps = GameManagerObject.GetComponent<GameManager>().GetCurrentTeamsPowerUps();
         if(powerUps.Count == 0) {
             NoPowerUpText.SetActive(true);
+            NoPowerUpText.GetComponent<Text>().text = GameManager.teams[GameManager.currentTeamId].teamName + " has no power ups!";
             powerUpTable.SetActive(false);
         } else {
             NoPowerUpText.SetActive(false);
@@ -353,7 +354,7 @@ public class SpinWheel : MonoBehaviour
     public void TriplePoints(int slot) {
         GameManagerObject.GetComponent<GameManager>().triplePointsActive = true;
         GameManager.teams[GameManager.currentTeamId].powerUps.Remove("Triple Points");
-        GameObject.Find("DoublePoints" + slot.ToString()).SetActive(false);
+        GameObject.Find("TriplePoints" + slot.ToString()).SetActive(false);
         GameObject.Find("PowerUpText" + slot.ToString()).SetActive(false);
     }
 
@@ -566,7 +567,7 @@ public class SpinWheel : MonoBehaviour
                             currentPowerUp++;
                         } else {
                             DoublePoints3.SetActive(true);
-                            powerUp2.SetActive(true);
+                            powerUp3.SetActive(true);
                             DoublePoints3.SetActive(true);
                             PowerUpText3.SetActive(true);
                             PowerUpText3.GetComponent<Text>().text = "Double Points";
@@ -584,7 +585,7 @@ public class SpinWheel : MonoBehaviour
                     } else {
                         if(currentPowerUp == 2) {
                             powerUp2.SetActive(true);
-                            TriplePoints1.SetActive(true);
+                            TriplePoints2.SetActive(true);
                             PowerUpText2.SetActive(true);
                             PowerUpText2.GetComponent<Text>().text = "Triple Points";
                             currentPowerUp++;
