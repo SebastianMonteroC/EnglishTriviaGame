@@ -9,6 +9,12 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: 43dc884c345dac648ab4c0c763fb5d24
   - enabled: 1
+    path: Assets/Scenes/GameModeSelect.unity
+    guid: 66e6e8dbbb948ad48920ad535023c581
+  - enabled: 1
+    path: Assets/Scenes/CustomBankMenu.unity
+    guid: 6c0da21d854081f4fb6920507b5bb234
+  - enabled: 1
     path: Assets/Scenes/SettingsMenu.unity
     guid: 06b14e9cdbd71bf4c915f7758a0fde41
   - enabled: 1

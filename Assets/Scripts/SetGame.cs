@@ -34,8 +34,13 @@ public class SetGame : MonoBehaviour
         timerSeconds = 10;
         pointsText.text = "Points to win: " + pointsToWin.ToString();
 
-        GameObject.Find("Grade").GetComponent<Text>().text += "Grade: " + GameManager.grade + "th grade";
-        GameObject.Find("Unit").GetComponent<Text>().text += "Unit: " + GameManager.unit;
+        if(GameManager.grade != "" && GameManager.unit != ""){
+            GameObject.Find("Grade").GetComponent<Text>().text += "Grade: " + GameManager.grade + "th grade";
+            GameObject.Find("Unit").GetComponent<Text>().text += "Unit: " + GameManager.unit;
+        } else {
+            GameObject.Find("Grade").GetComponent<Text>().text += GameManager.customQuestionBank;
+            GameObject.Find("Unit").GetComponent<Text>().text += "";
+        }
     }
 
     void Update() {
@@ -147,6 +152,11 @@ public class SetGame : MonoBehaviour
     public void BackToMenu() {
         GameManager.teams.Clear();
         SoundManager.Instance.PlaySFX("backButton");
-        SceneManager.LoadScene("LevelPicker");
+        if(GameManager.customQuestionBank != ""){
+            GameManager.customQuestionBank = "";
+            SceneManager.LoadScene("GameModeSelect");
+        } else {
+            SceneManager.LoadScene("LevelPicker");
+        }
     }
 }

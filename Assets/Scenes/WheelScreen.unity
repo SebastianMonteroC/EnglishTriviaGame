@@ -11499,7 +11499,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1865430074}
         m_TargetAssemblyTypeName: SpinWheel, Assembly-CSharp
-        m_MethodName: SabotageTeam
+        m_MethodName: OpenSabotageContainer
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -11851,7 +11851,7 @@ MonoBehaviour:
     m_Font: {fileID: 12800000, guid: d7cffddcbc0cc8f4ebe6e28eb9804082, type: 3}
     m_FontSize: 60
     m_FontStyle: 0
-    m_BestFit: 0
+    m_BestFit: 1
     m_MinSize: 0
     m_MaxSize: 60
     m_Alignment: 4

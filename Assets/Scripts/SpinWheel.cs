@@ -118,7 +118,12 @@ public class SpinWheel : MonoBehaviour
         ReadingImage.enabled = false;
         WritingImage.enabled = false;
 
-        questionManager = new QuestionManager(GameManager.grade, GameManager.unit);
+        if(GameManager.grade != "" && GameManager.unit != "") {
+            questionManager = new QuestionManager(GameManager.grade, GameManager.unit);
+        } else {
+            questionManager = new QuestionManager(GameManager.customQuestionBank);
+        }
+        
         LoadListeningAudios();
         GameManagerObject.GetComponent<GameManager>().StartGamePowerUps();
         LoadTeamPowerUps();
@@ -338,10 +343,14 @@ public class SpinWheel : MonoBehaviour
     }
 
     public void LoadListeningAudios() {
-        string fileBase = "listening-{GRADE}-U{X}-{#}";
-        fileBase = fileBase.Replace("{GRADE}", GameManager.grade);
-        fileBase = fileBase.Replace("{X}", GameManager.unit);
-        StartCoroutine(SoundManager.Instance.LoadAudio(fileBase, questionManager.listeningQuestions.Count));
+        if(GameManager.grade != "" && GameManager.unit != ""){
+            string fileBase = "listening-{GRADE}-U{X}-{#}";
+            fileBase = fileBase.Replace("{GRADE}", GameManager.grade);
+            fileBase = fileBase.Replace("{X}", GameManager.unit);
+        } else {
+            StartCoroutine(SoundManager.Instance.LoadCustomAudio(questionManager.listeningQuestions));
+        }
+        
     }
 
     public void DoublePoints(int slot) {

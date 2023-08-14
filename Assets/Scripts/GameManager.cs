@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     public static bool winner;
     public static string unit;
     public static string grade;
+    public static string customQuestionBank;
     private int turnCounter;
 
     public bool doublePointsActive = false;
@@ -142,17 +143,8 @@ public class GameManager : MonoBehaviour
     }
 
     public void StartGamePowerUps() {
-        string[] POWER_UPS = {"Double Points", "Change Question", "Re-Spin", "Sabotage"};
-        string[] HANDICAP = {"Triple Points", "Steal Point", "Sabotage"};
-        int i = 0;
-        
         foreach(var team in teams) {
             team.powerUps.Add(powerUpManager.GetRegularPowerUp());
-            team.powerUps.Add(POWER_UPS[i]);
-            if(i < 3) {
-                team.powerUps.Add(HANDICAP[i]);
-            }
-            i++;
         }
     }
 }

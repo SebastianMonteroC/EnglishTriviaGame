@@ -1,7 +1,7 @@
 {
     "Question" : [
         {
-            "question" : "Read the following sentence out loud and extract Alexa's opinion about the math subject. Pronunciation is considered.\nJoe: “I can't wait for math class to begin! Teacher Vanessa said I was her favorite student! I told her math was my favorite subject.”",
+            "question" : "Read the following sentence out loud and extract Alexa's opinion about the math subject. Pronunciation is considered.\nAlexa: “I can't wait for math class to begin! Teacher Vanessa said I was her favorite student! I told her math was my favorite subject.”",
             "answer" : "Alexa likes math and is excited for class the class to begin. It's her favorite subject."
         },
         {

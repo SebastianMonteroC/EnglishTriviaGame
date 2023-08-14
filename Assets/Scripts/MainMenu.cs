@@ -10,12 +10,12 @@ public class MainMenu : MonoBehaviour
 
     public void NewGame() {
         SoundManager.Instance.PlaySFX("newGame");
-        SceneManager.LoadScene("LevelPicker");
+        SceneManager.LoadScene("GameModeSelect");
     }
 
     public void Create() {
         SoundManager.Instance.PlaySFX("settings");
-        SceneManager.LoadScene("QuestionCreator");
+        SceneManager.LoadScene("CustomBankMenu");
     }
 
     public void QuitGame() {
@@ -23,6 +23,7 @@ public class MainMenu : MonoBehaviour
     }
 
     public void Settings() {
+        //PlayerPrefs.DeleteAll();
         SoundManager.Instance.PlaySFX("settings");
         SceneManager.LoadScene("SettingsMenu");
     }

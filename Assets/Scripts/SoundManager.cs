@@ -46,6 +46,7 @@ public class SoundManager : MonoBehaviour
         for(int i = 0; i < count; i++) {
             string i_filename = filename.Replace("{#}", i.ToString());
             string path = Application.streamingAssetsPath + "/ListeningFiles/" + i_filename + ".mp3";
+            
             importer.Import(path);
 
             while (!importer.isInitialized && !importer.isError)
@@ -57,6 +58,26 @@ public class SoundManager : MonoBehaviour
             AudioClip listeningClip = importer.audioClip;
             Sound listeningSound = new Sound();
             listeningSound.name = i_filename;
+            listeningSound.audio = listeningClip;
+            unitListeningSounds.Add(listeningSound);
+        }
+    }
+
+    public IEnumerator LoadCustomAudio(List<Question> audios){
+        foreach(var audioPath in audios) {
+            string path = audioPath.path;
+            
+            importer.Import(path);
+
+            while (!importer.isInitialized && !importer.isError)
+                yield return null;
+
+            if (importer.isError)
+                Debug.LogError(importer.error);
+
+            AudioClip listeningClip = importer.audioClip;
+            Sound listeningSound = new Sound();
+            listeningSound.name = audioPath.path;
             listeningSound.audio = listeningClip;
             unitListeningSounds.Add(listeningSound);
         }

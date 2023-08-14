@@ -44,6 +44,7 @@ public class QuestionCreator : MonoBehaviour
     private string SelectedAudioPath = "";
 
     private List<AudioPath> ListeningAudios;
+    private int CustomQuestionBankCount;
 
     void Start() {
         ReadingQuestions = new List<Question>();
@@ -262,7 +263,7 @@ public class QuestionCreator : MonoBehaviour
 
     public void SaveQuestions() {
         Directory.CreateDirectory(Application.persistentDataPath + "/" + QuestionBankName.GetComponent<InputField>().text + "_audios");
-        
+
         //writing listening
         string listening_path = QuestionBankName.GetComponent<InputField>().text + "_listening.json";
         string listening_json = "{\n\t\"Question\": [ \n";
@@ -324,11 +325,18 @@ public class QuestionCreator : MonoBehaviour
 
         SavedChanges.SetActive(true);
         FadeOut = true;
+        if(!PlayerPrefs.HasKey("custom1")){
+            PlayerPrefs.SetString("custom1", QuestionBankName.GetComponent<InputField>().text);
+        } else if(!PlayerPrefs.HasKey("custom2")){
+            PlayerPrefs.SetString("custom2", QuestionBankName.GetComponent<InputField>().text);
+        } else {
+            PlayerPrefs.SetString("custom3", QuestionBankName.GetComponent<InputField>().text);
+        }
     }
 
     public void MainMenu() {
         SoundManager.Instance.PlaySFX("backButton");
-        SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene("CustomBankMenu");
     }
 }
 

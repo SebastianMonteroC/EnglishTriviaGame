@@ -18,7 +18,9 @@ public class LevelSelector : MonoBehaviour
     public void BackToMenu() {
         SoundManager.Instance.PlaySFX("backButton");
         GameManager.teams.Clear();
-        SceneManager.LoadScene("MainMenu");
+        GameManager.unit = "";
+        GameManager.grade = "";
+        SceneManager.LoadScene("GameModeSelect");
     }
 
     public void ToggleUnitSelection(int grade) {

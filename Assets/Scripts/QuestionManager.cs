@@ -8,6 +8,7 @@ using UnityEngine;
 public class QuestionManager {
     public string assetsFolder = Application.streamingAssetsPath + "/Questions/";
     public string listeningAssetsFolder = Application.streamingAssetsPath + "/ListeningFiles/";
+    public string customsFolder = Application.persistentDataPath + "/";
     //Speaking
     public string speakingFile = "speaking-{GRADE}-U{X}.json";
     public List<Question> speakingQuestions;
@@ -34,7 +35,16 @@ public class QuestionManager {
         wrongWritingQuestions = new List<Question>();
         wrongListeningQuestions = new List<Question>();
         SetFileNames(gradeNumber, unitNumber);
-        LoadQuestions();
+        LoadQuestions(assetsFolder);
+    }
+    
+    public QuestionManager(string customQuestionBank) {
+        wrongReadingQuestions = new List<Question>();
+        wrongSpeakingQuestions = new List<Question>();
+        wrongWritingQuestions = new List<Question>();
+        wrongListeningQuestions = new List<Question>();
+        SetFileNamesCustom(customQuestionBank);
+        LoadQuestions(customsFolder);
     }
 
     void SetFileNames(string gradeNumber, string unitNumber) {
@@ -48,15 +58,22 @@ public class QuestionManager {
         this.listeningFile = this.listeningFile.Replace("{X}",unitNumber);
     }
 
-    void LoadQuestions() {
-        this.readingQuestions = LoadFromJSON(this.readingFile);
-        this.writingQuestions = LoadFromJSON(this.writingFile);
-        this.speakingQuestions = LoadFromJSON(this.speakingFile);
-        this.listeningQuestions = LoadFromJSON(this.listeningFile);
+    void SetFileNamesCustom(string customQuestionBank) {
+        this.speakingFile = customQuestionBank + "_speaking.json";
+        this.readingFile = customQuestionBank + "_reading.json";
+        this.writingFile = customQuestionBank + "_writing.json";
+        this.listeningFile = customQuestionBank + "_listening.json";
+    }
+
+    void LoadQuestions(string path) {
+        this.readingQuestions = LoadFromJSON(path + this.readingFile);
+        this.writingQuestions = LoadFromJSON(path + this.writingFile);
+        this.speakingQuestions = LoadFromJSON(path + this.speakingFile);
+        this.listeningQuestions = LoadFromJSON(path + this.listeningFile);
     }
 
     public List<Question> LoadFromJSON(string file) {
-        string jsonContent = File.ReadAllText(assetsFolder + file);
+        string jsonContent = File.ReadAllText(file);
         QuestionData questionData = JsonUtility.FromJson<QuestionData>(jsonContent);
         List<Question> questionList = new List<Question>();
         if (questionData != null && questionData.Question != null) {
