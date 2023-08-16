@@ -23,7 +23,7 @@ public class MainMenu : MonoBehaviour
     }
 
     public void Settings() {
-        //PlayerPrefs.DeleteAll();
+        
         SoundManager.Instance.PlaySFX("settings");
         SceneManager.LoadScene("SettingsMenu");
     }

@@ -8,10 +8,12 @@ using UnityEngine.UI;
 public class GameModeManager : MonoBehaviour
 {
     public GameObject QuestionPrefab;
+    [SerializeField] public GameObject NoCustoms;
 
     void Start()
     {
         if(PlayerPrefs.HasKey("custom1")){
+            NoCustoms.SetActive(false);
             GameObject childObject = Instantiate(QuestionPrefab) as GameObject;
             childObject.transform.SetParent(GameObject.Find("Panel").transform, false);
             childObject.transform.Find("QuestionBankName").gameObject.GetComponent<Text>().text = PlayerPrefs.GetString("custom1");

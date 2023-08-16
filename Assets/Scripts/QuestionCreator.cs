@@ -32,8 +32,12 @@ public class QuestionCreator : MonoBehaviour
     [SerializeField] GameObject SelectedFileText;
     [SerializeField] GameObject SavedChanges;
     [SerializeField] GameObject SavedText;
+    [SerializeField] GameObject ConfirmExit;
 
     private bool FadeOut = false;
+    private bool saved = true;
+    private bool editingBank = false;
+    private string editingName = "";
 
     private List<Question> ReadingQuestions;
     private List<Question> ListeningQuestions;
@@ -47,11 +51,17 @@ public class QuestionCreator : MonoBehaviour
     private int CustomQuestionBankCount;
 
     void Start() {
-        ReadingQuestions = new List<Question>();
-        ListeningQuestions = new List<Question>();
-        SpeakingQuestions = new List<Question>();
-        WritingQuestions = new List<Question>();
         DisplayedQuestions = new List<GameObject>();
+        if(GameManager.customQuestionBank != "" && GameManager.customQuestionBank != null) {
+            LoadQuestionBank();
+            editingBank = true;
+            editingName = GameManager.customQuestionBank;
+        } else {
+            ReadingQuestions = new List<Question>();
+            ListeningQuestions = new List<Question>();
+            SpeakingQuestions = new List<Question>();
+            WritingQuestions = new List<Question>();
+        }
     }
 
     void Update() {
@@ -86,6 +96,8 @@ public class QuestionCreator : MonoBehaviour
             QuestionBoxText.GetComponent<Text>().text = "New " + currentCategory.ToLower() + " question";
         } else {
             QuestionBoxText.GetComponent<Text>().text = "Edit " + currentCategory + " question";
+            SelectedFileText.SetActive(true);
+            SelectedFileText.GetComponent<Text>().text = "Selected File:\n" + Path.GetFileName(SelectedAudioPath);
         }
     
         blocker.SetActive(true);
@@ -109,7 +121,6 @@ public class QuestionCreator : MonoBehaviour
         question.path = SelectedAudioPath;
         switch (currentCategory)  {
             case "Listening":
-                //set the path to match the file thats gonna be saved
                 this.ListeningQuestions.Add(question);
             break;
             case "Reading":
@@ -122,6 +133,7 @@ public class QuestionCreator : MonoBehaviour
                 this.SpeakingQuestions.Add(question);
             break; 
         }
+        saved = false;
         CloseAddNewQuestion();
         LoadCategoryQuestions();
         InputBackButton.SetActive(true);
@@ -224,6 +236,7 @@ public class QuestionCreator : MonoBehaviour
         editing = true;
         QuestionInputField.GetComponent<InputField>().text = question.question;
         AnswerInputField.GetComponent<InputField>().text = question.answer;
+        SelectedAudioPath = question.path;
         OpenAddNewQuestion();
         InputBackButton.SetActive(false);
         switch (category)  {
@@ -259,6 +272,7 @@ public class QuestionCreator : MonoBehaviour
             break;
         }
         LoadCategoryQuestions();
+        saved = false;
     }
 
     public void SaveQuestions() {
@@ -325,18 +339,74 @@ public class QuestionCreator : MonoBehaviour
 
         SavedChanges.SetActive(true);
         FadeOut = true;
-        if(!PlayerPrefs.HasKey("custom1")){
-            PlayerPrefs.SetString("custom1", QuestionBankName.GetComponent<InputField>().text);
-        } else if(!PlayerPrefs.HasKey("custom2")){
-            PlayerPrefs.SetString("custom2", QuestionBankName.GetComponent<InputField>().text);
+        saved = true;
+        if(!editingBank){
+            if(!PlayerPrefs.HasKey("custom1")){
+                PlayerPrefs.SetString("custom1", QuestionBankName.GetComponent<InputField>().text);
+            } else if(!PlayerPrefs.HasKey("custom2")){
+                PlayerPrefs.SetString("custom2", QuestionBankName.GetComponent<InputField>().text);
+            } else {
+                PlayerPrefs.SetString("custom3", QuestionBankName.GetComponent<InputField>().text);
+            }
         } else {
-            PlayerPrefs.SetString("custom3", QuestionBankName.GetComponent<InputField>().text);
+            if(PlayerPrefs.HasKey("custom1") && PlayerPrefs.GetString("custom1") == editingName){
+                PlayerPrefs.SetString("custom1", QuestionBankName.GetComponent<InputField>().text);
+            } else if(PlayerPrefs.HasKey("custom2") && PlayerPrefs.GetString("custom1") == editingName){
+                PlayerPrefs.SetString("custom2", QuestionBankName.GetComponent<InputField>().text);
+            } else {
+                PlayerPrefs.SetString("custom3", QuestionBankName.GetComponent<InputField>().text);
+            }
         }
     }
 
+    public void Exit() {
+        if(QuestionBankName.GetComponent<InputField>().text != "" && !saved){
+            ConfirmExit.SetActive(true);
+        } else {
+            MainMenu();
+        }
+    }
+
+    public void SaveAndExit(){
+        SaveQuestions();
+        MainMenu();
+    }
+
+    public void NameChanged(){
+        saved = false;
+    }
+
+    public void CancelExit() {
+        ConfirmExit.SetActive(false);
+    }
+
     public void MainMenu() {
+        GameManager.customQuestionBank = "";
         SoundManager.Instance.PlaySFX("backButton");
         SceneManager.LoadScene("CustomBankMenu");
+    }
+
+    private void LoadQuestionBank(){
+        QuestionBankName.GetComponent<InputField>().text = GameManager.customQuestionBank;
+        ReadingQuestions = LoadFromJSON(Application.persistentDataPath + "/" +  GameManager.customQuestionBank + "_reading.json");
+        ListeningQuestions = LoadFromJSON(Application.persistentDataPath + "/" +  GameManager.customQuestionBank + "_listening.json");
+        SpeakingQuestions = LoadFromJSON(Application.persistentDataPath + "/" +  GameManager.customQuestionBank + "_speaking.json");
+        WritingQuestions = LoadFromJSON(Application.persistentDataPath + "/" +  GameManager.customQuestionBank + "_writing.json");
+    }
+
+    public List<Question> LoadFromJSON(string file) {
+        string jsonContent = File.ReadAllText(file);
+        QuestionData questionData = JsonUtility.FromJson<QuestionData>(jsonContent);
+        List<Question> questionList = new List<Question>();
+        if (questionData != null && questionData.Question != null) {
+            questionList = questionData.Question;
+        } else {
+            Debug.LogError("Failed to parse JSON data or no questions found!");
+        }
+        if (questionList.Count == 0) {
+            Debug.LogError("No questions loaded.");
+        }
+        return questionList;
     }
 }
 
