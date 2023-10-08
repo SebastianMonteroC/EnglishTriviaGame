@@ -88,6 +88,8 @@ public class SoundManager : MonoBehaviour
         if (sound != null) {
             Debug.Log("playing");
             sfxSource.PlayOneShot(sound.audio);
+        } else {
+            Debug.Log("null audio");
         }
     }
 

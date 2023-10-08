@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     public static string unit;
     public static string grade;
     public static string customQuestionBank;
-    private int turnCounter;
+    public static int turnCounter;
 
     public bool doublePointsActive = false;
     public bool triplePointsActive = false;

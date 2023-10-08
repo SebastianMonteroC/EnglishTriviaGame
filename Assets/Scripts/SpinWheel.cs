@@ -14,6 +14,9 @@ public class SpinWheel : MonoBehaviour
     
     [SerializeField] private GameObject GameManagerObject;
 
+    //Pause Menu
+    [SerializeField] private GameObject pauseOverlay;
+
     private string currentWheelPiece;
     [SerializeField] private GameObject interactionBox;
     [SerializeField] private GameObject powerUpInteractionBox;
@@ -347,6 +350,7 @@ public class SpinWheel : MonoBehaviour
             string fileBase = "listening-{GRADE}-U{X}-{#}";
             fileBase = fileBase.Replace("{GRADE}", GameManager.grade);
             fileBase = fileBase.Replace("{X}", GameManager.unit);
+            StartCoroutine(SoundManager.Instance.LoadAudio(fileBase, questionManager.listeningQuestions.Count));
         } else {
             StartCoroutine(SoundManager.Instance.LoadCustomAudio(questionManager.listeningQuestions));
         }
@@ -706,5 +710,44 @@ public class SpinWheel : MonoBehaviour
             powerUp2.SetActive(true);
             powerUp3.SetActive(true);
         }
+    }
+
+    public void PauseGame () {
+        pauseOverlay.SetActive(true);
+        Time.timeScale = 0;
+    }
+
+    public void ResumeGame () {
+        pauseOverlay.SetActive(false);
+        Time.timeScale = 1;
+    }
+
+    public void SaveAndExit() {
+        string save_key = "save1";
+        string save_id = "1";
+        bool save = true;
+        if(PlayerPrefs.HasKey("save1")) {
+            save_key = "save2";
+            save_id = "2";
+        } else if(PlayerPrefs.HasKey("save2")) {
+            save_key = "save3";
+            save_id = "3";
+        } else if(PlayerPrefs.HasKey("save3")) {
+            // override savefile!
+        }
+
+        if (save) {
+            PlayerPrefs.SetInt("currentTeamId" + save_id, GameManager.currentTeamId);
+            PlayerPrefs.SetInt("pointsToWin" + save_id, GameManager.pointsToWin);
+            PlayerPrefs.SetInt("time" + save_id, GameManager.time);
+            PlayerPrefs.SetInt("timerEnabled" + save_id, GameManager.timerEnabled? 1 : 0 ); //1 = true, 0 = false
+            PlayerPrefs.SetInt("turnCounter" + save_id, GameManager.turnCounter);
+            PlayerPrefs.SetString("unit" + save_id, GameManager.unit);
+            PlayerPrefs.SetString("grade" + save_id, GameManager.grade);
+            PlayerPrefs.SetString("customQuestionBank" + save_id, GameManager.customQuestionBank);
+            PlayerPrefs.SetString(save_key, save_key);
+        }
+
+        SceneManager.LoadScene("MainMenu");
     }
 }

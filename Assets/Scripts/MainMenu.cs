@@ -7,10 +7,14 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
-
     public void NewGame() {
         SoundManager.Instance.PlaySFX("newGame");
         SceneManager.LoadScene("GameModeSelect");
+    }
+
+    public void LoadGame() {
+        SoundManager.Instance.PlaySFX("newGame");
+        SceneManager.LoadScene("LoadGame");
     }
 
     public void Create() {
