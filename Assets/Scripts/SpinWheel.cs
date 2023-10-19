@@ -750,4 +750,8 @@ public class SpinWheel : MonoBehaviour
 
         SceneManager.LoadScene("MainMenu");
     }
+
+    public void ExitWithoutSaving() {
+        SceneManager.LoadScene("MainMenu");
+    }
 }

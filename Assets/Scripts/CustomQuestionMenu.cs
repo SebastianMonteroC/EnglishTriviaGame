@@ -34,28 +34,24 @@ public class CustomQuestionMenu : MonoBehaviour
         if(PlayerPrefs.HasKey("custom1")){
             questionBankAmount++;
             NoCustoms.SetActive(false);
-            GameObject childObject = Instantiate(QuestionPrefab) as GameObject;
-            childObject.transform.SetParent(GameObject.Find("Panel").transform, false);
-            childObject.transform.Find("QuestionBankName").gameObject.GetComponent<Text>().text = PlayerPrefs.GetString("custom1");
-            childObject.transform.Find("Delete").gameObject.GetComponent<Button>().onClick.AddListener(delegate { RemoveQuestionBank("custom1", childObject); });
-            childObject.transform.Find("Edit").gameObject.GetComponent<Button>().onClick.AddListener(delegate { SelectCustomQuestionBank(PlayerPrefs.GetString("custom1")); });
+            InstantiateQuestionBank(1);
             if(PlayerPrefs.HasKey("custom2")){
                 questionBankAmount++;
-                GameObject childObject2 = Instantiate(QuestionPrefab) as GameObject;
-                childObject2.transform.SetParent(GameObject.Find("Panel").transform, false);
-                childObject2.transform.Find("QuestionBankName").gameObject.GetComponent<Text>().text = PlayerPrefs.GetString("custom2");
-                childObject2.transform.Find("Delete").gameObject.GetComponent<Button>().onClick.AddListener(delegate { RemoveQuestionBank("custom2", childObject2); });
-                childObject2.transform.Find("Edit").gameObject.GetComponent<Button>().onClick.AddListener(delegate { SelectCustomQuestionBank(PlayerPrefs.GetString("custom2")); });
+                InstantiateQuestionBank(2);
                 if(PlayerPrefs.HasKey("custom3")){
                     questionBankAmount++;
-                    GameObject childObject3 = Instantiate(QuestionPrefab) as GameObject;
-                    childObject3.transform.SetParent(GameObject.Find("Panel").transform, false);
-                    childObject3.transform.Find("QuestionBankName").gameObject.GetComponent<Text>().text = PlayerPrefs.GetString("custom3");
-                    childObject3.transform.Find("Delete").gameObject.GetComponent<Button>().onClick.AddListener(delegate { RemoveQuestionBank("custom3", childObject3); });
-                    childObject3.transform.Find("Edit").gameObject.GetComponent<Button>().onClick.AddListener(delegate { SelectCustomQuestionBank(PlayerPrefs.GetString("custom3")); });
+                    InstantiateQuestionBank(3);
                 }    
             }     
         }
+    }
+
+    private void InstantiateQuestionBank(int question_id) {
+        GameObject childObject = Instantiate(QuestionPrefab) as GameObject;
+        childObject.transform.SetParent(GameObject.Find("Panel").transform, false);
+        childObject.transform.Find("QuestionBankName").gameObject.GetComponent<Text>().text = PlayerPrefs.GetString("custom" + question_id.ToString());
+        childObject.transform.Find("Delete").gameObject.GetComponent<Button>().onClick.AddListener(delegate { RemoveQuestionBank("custom" + question_id.ToString(), childObject); });
+        childObject.transform.Find("Edit").gameObject.GetComponent<Button>().onClick.AddListener(delegate { SelectCustomQuestionBank(PlayerPrefs.GetString("custom" + question_id.ToString())); });
     }
 
     public void RemoveQuestionBank(string name, GameObject deleted) {

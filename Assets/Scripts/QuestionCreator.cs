@@ -219,8 +219,14 @@ public class QuestionCreator : MonoBehaviour
         if(currentCategory == "Listening") {
             ConfirmNewQuestionButton.GetComponent<Button>().interactable = SelectedAudioPath != "" ? true : false;
         }
-        
+
         SaveQuestionBank.GetComponent<Button>().interactable = QuestionBankName.GetComponent<InputField>().text.Length > 0 ? true : false;
+
+        if(editingBank == false) {
+            SaveQuestionBank.GetComponent<Button>().interactable = QuestionBankName.GetComponent<InputField>().text != PlayerPrefs.GetString("custom1")
+            && QuestionBankName.GetComponent<InputField>().text != PlayerPrefs.GetString("custom2")
+            && QuestionBankName.GetComponent<InputField>().text != PlayerPrefs.GetString("custom3") ? true : false;
+        }
     }
 
     public void SelectFile() {
