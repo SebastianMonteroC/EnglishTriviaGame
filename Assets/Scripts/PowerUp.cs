@@ -15,7 +15,7 @@ public class PowerUp
     }
 
     public string GetHandicapPowerUp() {
-        int randomIndex = random.Next(4);
+        int randomIndex = random.Next(3);
         return HANDICAP_POWER_UPS[randomIndex];
     }
 }

@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
 {
     public static List<Team> teams = new List<Team>();
     public static PowerUp powerUpManager = new PowerUp();
-    public static int currentTeamId;
+    public static int currentTeamId = 0;
     public static int pointsToWin;
     public static int time;
     public static bool timerEnabled;
@@ -20,6 +20,9 @@ public class GameManager : MonoBehaviour
     public static string customQuestionBank;
     public static int turnCounter;
 
+    public static bool justLoaded = false;
+    public static int loadedGame = 0;
+
     public bool doublePointsActive = false;
     public bool triplePointsActive = false;
     public List<string> sabotages;
@@ -27,10 +30,16 @@ public class GameManager : MonoBehaviour
 
 
     public void Start(){
-        sabotages = new List<string>();
-        currentTeamId = 0;
-        winner = false;
+        CleanGameManager();
         TeamTurn();
+    }
+
+    public void CleanGameManager(){
+        doublePointsActive = false;
+        triplePointsActive = false;
+        sabotages = new List<string>();
+        sabotageActive = false;
+        winner = false;
     }
 
     public void AddPoint(){
@@ -84,10 +93,14 @@ public class GameManager : MonoBehaviour
     }
 
     private void TeamTurn(){
-        if(currentTeamId == 0) {
-            turnCounter++;
-            if(turnCounter % 3 == 0) {
-                GrantPowerUps();
+        if (justLoaded) {
+            justLoaded = false;
+        } else {
+            if(currentTeamId == 0) {
+                turnCounter++;
+                if(turnCounter % 3 == 0) {
+                    GrantPowerUps();
+                }
             }
         }
 

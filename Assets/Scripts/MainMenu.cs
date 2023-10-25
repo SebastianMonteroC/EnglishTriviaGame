@@ -7,6 +7,10 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
+    void Start() {
+        Time.timeScale = 1;
+    }
+
     public void NewGame() {
         SoundManager.Instance.PlaySFX("newGame");
         SceneManager.LoadScene("GameModeSelect");

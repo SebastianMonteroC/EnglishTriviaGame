@@ -13,4 +13,10 @@ public class Team
         score = 0;
         powerUps = new List<string>();
     }
+
+    public Team(string name, int score, List<string> powerUps) {
+        this.teamName = name;
+        this.score = score;
+        this.powerUps = powerUps;
+    }
 }

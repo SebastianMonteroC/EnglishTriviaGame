@@ -113,6 +113,7 @@ public class SpinWheel : MonoBehaviour
 
     private void Start(){
         AllPowerUps = InsertPowerUps();
+
         timerValue = GameManager.time;
         spinButtonUI.onClick.AddListener(Spin);
                 
@@ -128,7 +129,10 @@ public class SpinWheel : MonoBehaviour
         }
         
         LoadListeningAudios();
-        GameManagerObject.GetComponent<GameManager>().StartGamePowerUps();
+        if(GameManager.loadedGame == 0) {
+            GameManagerObject.GetComponent<GameManager>().StartGamePowerUps();
+        }
+        
         LoadTeamPowerUps();
     }
 
@@ -311,6 +315,7 @@ public class SpinWheel : MonoBehaviour
     private void LoadTeamPowerUps() {
         ResetPowerUpBox();
         List<string> powerUps = GameManagerObject.GetComponent<GameManager>().GetCurrentTeamsPowerUps();
+        Debug.Log(powerUps);
         if(powerUps.Count == 0) {
             NoPowerUpText.SetActive(true);
             NoPowerUpText.GetComponent<Text>().text = GameManager.teams[GameManager.currentTeamId].teamName + " has no power ups!";
@@ -726,17 +731,24 @@ public class SpinWheel : MonoBehaviour
         string save_key = "save1";
         string save_id = "1";
         bool save = true;
-        if(PlayerPrefs.HasKey("save1")) {
-            save_key = "save2";
-            save_id = "2";
-        } else if(PlayerPrefs.HasKey("save2")) {
-            save_key = "save3";
-            save_id = "3";
-        } else if(PlayerPrefs.HasKey("save3")) {
-            // override savefile!
+
+        if(GameManager.loadedGame != 0){
+            save_key = "save" + GameManager.loadedGame.ToString();
+            save_id = GameManager.loadedGame.ToString();
+        } else {
+            if(PlayerPrefs.HasKey("save1")) {
+                save_key = "save2";
+                save_id = "2";
+            } else if(PlayerPrefs.HasKey("save2")) {
+                save_key = "save3";
+                save_id = "3";
+            } else if(PlayerPrefs.HasKey("save3")) {
+                // override savefile!
+            }
         }
 
         if (save) {
+            SaveTeams(Int16.Parse(save_id));
             PlayerPrefs.SetInt("currentTeamId" + save_id, GameManager.currentTeamId);
             PlayerPrefs.SetInt("pointsToWin" + save_id, GameManager.pointsToWin);
             PlayerPrefs.SetInt("time" + save_id, GameManager.time);
@@ -748,10 +760,35 @@ public class SpinWheel : MonoBehaviour
             PlayerPrefs.SetString(save_key, save_key);
         }
 
+        wheel.ResetWheel();
+        GameManager.loadedGame = 0;
+        SoundManager.Instance.StopSFX();
         SceneManager.LoadScene("MainMenu");
     }
 
+    private void SaveTeams(int save_id) {
+        int teamIndex = 0;
+        PlayerPrefs.SetInt("save" + save_id.ToString() + "_team_count", GameManager.teams.Count);
+
+        foreach(var team in GameManager.teams) {
+            PlayerPrefs.SetString("save" + save_id.ToString() + "_team" + teamIndex.ToString() + "_name", team.teamName);
+            PlayerPrefs.SetInt("save" + save_id.ToString() + "_team" + teamIndex.ToString() + "_score", team.score);
+            PlayerPrefs.SetInt("save" + save_id.ToString() + "_team" + teamIndex.ToString() + "_powerUpCount", team.powerUps.Count);
+            if(team.powerUps.Count > 0) {
+                int powerUps = 0;
+                foreach(var powerUp in team.powerUps) {
+                    PlayerPrefs.SetString("save" + save_id.ToString() + "_team" + teamIndex.ToString() + "_powerUp" + powerUps, powerUp);
+                    powerUps++;
+                }
+            }
+            teamIndex++;
+        }
+    }
+
     public void ExitWithoutSaving() {
+        SoundManager.Instance.StopSFX();
+        wheel.ResetWheel();
+        GameManager.loadedGame = 0;
         SceneManager.LoadScene("MainMenu");
     }
 }

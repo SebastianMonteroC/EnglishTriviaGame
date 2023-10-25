@@ -37,7 +37,34 @@ public class LoadGame : MonoBehaviour
         childObject.GetComponent<Button>().onClick.AddListener(delegate { SelectSavedGame(save_id); });
     }
     private void SelectSavedGame(int save_id) {
-        
+        GameManager.loadedGame = save_id;
+        GameManager.pointsToWin = PlayerPrefs.GetInt("pointsToWin" + save_id);
+        GameManager.time = PlayerPrefs.GetInt("time" + save_id);
+        GameManager.timerEnabled = PlayerPrefs.GetInt("timerEnabled" + save_id) == 1 ? true : false; //1 = true, 0 = false;
+        GameManager.currentTeamId = PlayerPrefs.GetInt("currentTeamId" + save_id);
+        GameManager.turnCounter = PlayerPrefs.GetInt("turnCounter" + save_id);
+        GameManager.unit = PlayerPrefs.GetString("unit" + save_id, GameManager.unit);
+        GameManager.grade = PlayerPrefs.GetString("grade" + save_id, GameManager.grade);
+        GameManager.customQuestionBank = PlayerPrefs.GetString("customQuestionBank" + save_id, GameManager.customQuestionBank);
+        GameManager.teams = new List<Team>();
+        for(int i = 0; i < PlayerPrefs.GetInt("save" + save_id.ToString() + "_team_count"); i++) {
+            if(PlayerPrefs.GetInt("save" + save_id.ToString() + "_team" + i.ToString() + "_powerUpCount") > 0) {
+                Debug.Log("Team " + i.ToString() + " has: " + PlayerPrefs.GetInt("save" + save_id.ToString() + "_team" + i + "_powerUpCount") + " powerups");
+                List<string> teamPowerUps = new List<string>();
+                for(int powerUps = 0; powerUps < PlayerPrefs.GetInt("save" + save_id.ToString() + "_team" + i + "_powerUpCount"); powerUps++) {
+                    Debug.Log("Adding powerup #" + powerUps.ToString());
+                    teamPowerUps.Add(PlayerPrefs.GetString("save" + save_id.ToString() + "_team" + i.ToString() + "_powerUp" + powerUps));
+                }
+                Team newTeam = new Team(
+                    PlayerPrefs.GetString("save" + save_id.ToString() + "_team" + i.ToString() + "_name"),
+                    PlayerPrefs.GetInt("save" + save_id.ToString() + "_team" + i.ToString() + "_score"),
+                    teamPowerUps);
+                GameManager.teams.Add(newTeam);
+            }
+        }
+        GameManager.justLoaded = true;
+        SoundManager.Instance.PlaySFX("beginGame");
+        SceneManager.LoadScene("WheelScreen");
     }
 
     public void BackToMenu() {

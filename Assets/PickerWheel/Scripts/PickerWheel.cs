@@ -210,8 +210,9 @@ namespace EasyUI.PickerWheelUI {
          }
       }
 
-
-
+      public void ResetWheel() {
+         _isSpinning = false;
+      }
 
       private void OnValidate () {
          if (PickerWheelTransform != null)
