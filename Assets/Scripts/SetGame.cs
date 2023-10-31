@@ -110,7 +110,8 @@ public class SetGame : MonoBehaviour
         GameManager.pointsToWin = this.pointsToWin;
         GameManager.timerEnabled = this.timerEnabled;
         GameManager.time = this.timerSeconds;
-        GameManager.turnCounter = 0;
+        GameManager.turnCounter = 1;
+        GameManager.newGame = true;
         SoundManager.Instance.PlaySFX("beginGame");
         SceneManager.LoadScene("WheelScreen");
     }

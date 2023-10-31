@@ -48,19 +48,19 @@ public class LoadGame : MonoBehaviour
         GameManager.customQuestionBank = PlayerPrefs.GetString("customQuestionBank" + save_id, GameManager.customQuestionBank);
         GameManager.teams = new List<Team>();
         for(int i = 0; i < PlayerPrefs.GetInt("save" + save_id.ToString() + "_team_count"); i++) {
+            List<string> teamPowerUps = new List<string>();
             if(PlayerPrefs.GetInt("save" + save_id.ToString() + "_team" + i.ToString() + "_powerUpCount") > 0) {
                 Debug.Log("Team " + i.ToString() + " has: " + PlayerPrefs.GetInt("save" + save_id.ToString() + "_team" + i + "_powerUpCount") + " powerups");
-                List<string> teamPowerUps = new List<string>();
                 for(int powerUps = 0; powerUps < PlayerPrefs.GetInt("save" + save_id.ToString() + "_team" + i + "_powerUpCount"); powerUps++) {
                     Debug.Log("Adding powerup #" + powerUps.ToString());
                     teamPowerUps.Add(PlayerPrefs.GetString("save" + save_id.ToString() + "_team" + i.ToString() + "_powerUp" + powerUps));
                 }
-                Team newTeam = new Team(
-                    PlayerPrefs.GetString("save" + save_id.ToString() + "_team" + i.ToString() + "_name"),
-                    PlayerPrefs.GetInt("save" + save_id.ToString() + "_team" + i.ToString() + "_score"),
-                    teamPowerUps);
-                GameManager.teams.Add(newTeam);
             }
+            Team newTeam = new Team(
+                PlayerPrefs.GetString("save" + save_id.ToString() + "_team" + i.ToString() + "_name"),
+                PlayerPrefs.GetInt("save" + save_id.ToString() + "_team" + i.ToString() + "_score"),
+                teamPowerUps);
+            GameManager.teams.Add(newTeam);
         }
         GameManager.justLoaded = true;
         SoundManager.Instance.PlaySFX("beginGame");

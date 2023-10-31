@@ -193,7 +193,30 @@ public class SpinWheel : MonoBehaviour
         question.text = this.currentQuestion.question;
         timer.text = timerValue.ToString();
         if(GameManager.teams[GameManager.currentTeamId].powerUps.Contains("Change Question")) {
-            ChangeQuestionButton.SetActive(true);
+            bool active = true;
+            switch (currentWheelPiece) {
+                case "Reading":
+                    if (this.questionManager.readingQuestions.Count == 1) {
+                        active = false;
+                    }
+                break;
+                case "Writing":
+                    if (this.questionManager.writingQuestions.Count == 1) {
+                        active = false;
+                    }
+                break;
+                case "Speaking":
+                    if (this.questionManager.speakingQuestions.Count == 1) {
+                        active = false;
+                    }
+                break;
+                case "Listening":
+                    if (this.questionManager.listeningQuestions.Count == 1) {
+                        active = false;
+                    }
+                break;
+            }
+            ChangeQuestionButton.SetActive(active);
         }
         
         if(currentWheelPiece == "Listening") {
@@ -335,7 +358,7 @@ public class SpinWheel : MonoBehaviour
     public void BackToMainMenu(){
         SoundManager.Instance.PlaySFX("backButton");
         winnerContainer.SetActive(false);
-        SceneManager.LoadScene("TeamPicker");
+        SceneManager.LoadScene("MainMenu");
     }
 
     public void PlayAudio(){
@@ -359,7 +382,6 @@ public class SpinWheel : MonoBehaviour
         } else {
             StartCoroutine(SoundManager.Instance.LoadCustomAudio(questionManager.listeningQuestions));
         }
-        
     }
 
     public void DoublePoints(int slot) {
@@ -399,6 +421,7 @@ public class SpinWheel : MonoBehaviour
         question.text = this.currentQuestion.question;
         timerValue = GameManager.time;
         timer.text = timerValue.ToString();
+        GameManager.teams[GameManager.currentTeamId].powerUps.Remove("Change Question");
     }
 
     public void RespinWheel() {
@@ -646,6 +669,9 @@ public class SpinWheel : MonoBehaviour
                         PowerUpText1.SetActive(true);
                         PowerUpText1.GetComponent<Text>().text = "Steal Point";
                         currentPowerUp++;
+                        if(GameManager.teams[GameManager.currentTeamId].score+1 == GameManager.pointsToWin) {
+                            StealPoint1.GetComponent<Button>().interactable = false;
+                        }
                     } else {
                         if(currentPowerUp == 2) {
                             powerUp2.SetActive(true);
@@ -653,12 +679,18 @@ public class SpinWheel : MonoBehaviour
                             PowerUpText2.SetActive(true);
                             PowerUpText2.GetComponent<Text>().text = "Steal Point";
                             currentPowerUp++;
+                            if(GameManager.teams[GameManager.currentTeamId].score+1 == GameManager.pointsToWin) {
+                                StealPoint1.GetComponent<Button>().interactable = false;
+                            }
                         } else {
                             powerUp3.SetActive(true);
                             StealPoint3.SetActive(true);
                             PowerUpText3.SetActive(true);
                             PowerUpText3.GetComponent<Text>().text = "Steal Point";
                             currentPowerUp++;
+                            if(GameManager.teams[GameManager.currentTeamId].score+1 == GameManager.pointsToWin) {
+                                StealPoint1.GetComponent<Button>().interactable = false;
+                            }
                         }
                     }
                 break;
@@ -737,13 +769,15 @@ public class SpinWheel : MonoBehaviour
             save_id = GameManager.loadedGame.ToString();
         } else {
             if(PlayerPrefs.HasKey("save1")) {
-                save_key = "save2";
-                save_id = "2";
-            } else if(PlayerPrefs.HasKey("save2")) {
-                save_key = "save3";
-                save_id = "3";
-            } else if(PlayerPrefs.HasKey("save3")) {
-                // override savefile!
+                if(!PlayerPrefs.HasKey("save2")) {
+                    save_key = "save2";
+                    save_id = "2";
+                } else if(!PlayerPrefs.HasKey("save3")){
+                    save_key = "save3";
+                    save_id = "3";
+                } else {
+                    // override savefile!
+                }
             }
         }
 
@@ -769,11 +803,12 @@ public class SpinWheel : MonoBehaviour
     private void SaveTeams(int save_id) {
         int teamIndex = 0;
         PlayerPrefs.SetInt("save" + save_id.ToString() + "_team_count", GameManager.teams.Count);
-
+        Debug.Log("team count: "+ GameManager.teams.Count.ToString());
         foreach(var team in GameManager.teams) {
             PlayerPrefs.SetString("save" + save_id.ToString() + "_team" + teamIndex.ToString() + "_name", team.teamName);
             PlayerPrefs.SetInt("save" + save_id.ToString() + "_team" + teamIndex.ToString() + "_score", team.score);
             PlayerPrefs.SetInt("save" + save_id.ToString() + "_team" + teamIndex.ToString() + "_powerUpCount", team.powerUps.Count);
+            Debug.Log("Saved Team " + teamIndex.ToString() + ": " + team.teamName + ", with " + team.score.ToString() + " points and " + team.powerUps.Count + " powerups.");
             if(team.powerUps.Count > 0) {
                 int powerUps = 0;
                 foreach(var powerUp in team.powerUps) {

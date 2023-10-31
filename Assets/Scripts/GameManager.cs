@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     public static string customQuestionBank;
     public static int turnCounter;
 
+    public static bool newGame = false;
     public static bool justLoaded = false;
     public static int loadedGame = 0;
 
@@ -78,7 +79,7 @@ public class GameManager : MonoBehaviour
 
     private void VerifyWin(){
         if(teams[currentTeamId].score == pointsToWin){
-            Debug.Log("The team " + teams[currentTeamId].teamName + " has won!!!");
+            Debug.Log("The team " + teams[currentTeamId].teamName + " has won!");
             winner = true;
         }
     }
@@ -96,10 +97,14 @@ public class GameManager : MonoBehaviour
         if (justLoaded) {
             justLoaded = false;
         } else {
-            if(currentTeamId == 0) {
-                turnCounter++;
-                if(turnCounter % 3 == 0) {
-                    GrantPowerUps();
+            if(newGame) {
+                newGame = false;
+            } else {
+                if(currentTeamId == 0) {
+                    turnCounter++;
+                    if(turnCounter % 3 == 0) {
+                        GrantPowerUps();
+                    }
                 }
             }
         }
