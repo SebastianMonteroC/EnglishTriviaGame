@@ -1,17 +1,18 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LevelSelector : MonoBehaviour
 {
-    private GameObject unitSelection;
+    [SerializeField] public GameObject unitSelection;
+    [SerializeField] public GameObject[] unit;
     private bool isUnitSelectionActive = false;
 
     void Start() {
-        unitSelection = GameObject.Find("UnitSelectionBox");
         unitSelection.SetActive(false);
     }
 
@@ -21,6 +22,19 @@ public class LevelSelector : MonoBehaviour
         GameManager.unit = "";
         GameManager.grade = "";
         SceneManager.LoadScene("GameModeSelect");
+    }
+
+    void Update() {
+        UnitCheck();
+    }
+
+    private void UnitCheck() {
+        string speakingFile = "speaking-{GRADE}-U{X}.json";
+        for(int i = 1; i < 7; i++) {
+            string replacedFile = speakingFile.Replace("{GRADE}", GameManager.grade.ToString());
+            replacedFile = replacedFile.Replace("{X}", i.ToString());
+            unit[i-1].GetComponent<Button>().interactable = File.Exists(Application.streamingAssetsPath + "/Questions/" + replacedFile) ? true : false;
+        }
     }
 
     public void ToggleUnitSelection(int grade) {

@@ -11,6 +11,7 @@ using UnityEngine.UI;
 
 public class Settings : MonoBehaviour
 {
+    [SerializeField] GameObject blockerSave;
     [SerializeField] GameObject blocker;
     [SerializeField] GameObject SavedChanges;
     [SerializeField] GameObject SavedText;
@@ -42,12 +43,33 @@ public class Settings : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
+    public void DeleteSavesPress() {
+        blockerSave.SetActive(true);
+        SoundManager.Instance.PlaySFX("defaultButton");
+    }
+
+    public void BackDeleteSave() {
+        SoundManager.Instance.PlaySFX("backButton");
+        blockerSave.SetActive(false);
+    }
+
     public void DeletePress() {
         blocker.SetActive(true);
+        SoundManager.Instance.PlaySFX("defaultButton");
     }
 
     public void BackDelete() {
+        SoundManager.Instance.PlaySFX("backButton");
         blocker.SetActive(false);
+    }
+
+    public void DeleteSaveFiles(){
+        PlayerPrefs.DeleteAll();
+        Directory.CreateDirectory(Application.persistentDataPath);
+        BackDelete();
+        SavedChanges.SetActive(true);
+        blockerSave.SetActive(false);
+        FadeOut = true;
     }
 
     public void DeleteEverything(){

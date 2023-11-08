@@ -30,9 +30,14 @@ public class LoadGame : MonoBehaviour
     private void InstantiateSaveFile(int save_id) {
         GameObject childObject = Instantiate(SavedGamePrefab) as GameObject;
         childObject.transform.SetParent(GameObject.Find("Panel").transform, false);
+        if(PlayerPrefs.GetString("grade" + save_id.ToString()) != "") {
+            childObject.transform.Find("Grade").gameObject.GetComponent<Text>().text = "Grade: " + PlayerPrefs.GetString("grade" + save_id.ToString());
+            childObject.transform.Find("Unit").gameObject.GetComponent<Text>().text = "Unit: " + PlayerPrefs.GetString("unit" + save_id.ToString());
+        } else {
+            childObject.transform.Find("Grade").gameObject.GetComponent<Text>().text = "Custom Questions: " + PlayerPrefs.GetString("customQuestionBank" + save_id.ToString());
+            childObject.transform.Find("Unit").gameObject.GetComponent<Text>().text = "";
+        }
         childObject.transform.Find("SaveName").gameObject.GetComponent<Text>().text = "Save #" + save_id.ToString();
-        childObject.transform.Find("Grade").gameObject.GetComponent<Text>().text = "Grade: " + PlayerPrefs.GetString("grade" + save_id.ToString());
-        childObject.transform.Find("Unit").gameObject.GetComponent<Text>().text = "Unit: " + PlayerPrefs.GetString("unit" + save_id.ToString());
         childObject.transform.Find("Rounds").gameObject.GetComponent<Text>().text = "Turns: " + PlayerPrefs.GetInt("turnCounter" + save_id.ToString()).ToString();
         childObject.GetComponent<Button>().onClick.AddListener(delegate { SelectSavedGame(save_id); });
     }

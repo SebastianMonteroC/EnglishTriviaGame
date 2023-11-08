@@ -15,9 +15,9 @@ public class GameManager : MonoBehaviour
     public static int time;
     public static bool timerEnabled;
     public static bool winner;
-    public static string unit;
-    public static string grade;
-    public static string customQuestionBank;
+    public static string unit = "";
+    public static string grade = "";
+    public static string customQuestionBank = "";
     public static int turnCounter;
 
     public static bool newGame = false;

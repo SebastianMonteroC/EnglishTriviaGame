@@ -88,6 +88,7 @@ public class QuestionCreator : MonoBehaviour
 
     public void OpenAddNewQuestion() {
         AddQuestionBox.SetActive(true);
+        SoundManager.Instance.PlaySFX("defaultButton");
         if(currentCategory == "Listening"){
             UploadAudioFileButton.SetActive(true);
         }
@@ -104,6 +105,7 @@ public class QuestionCreator : MonoBehaviour
     }
 
     public void CloseAddNewQuestion() {
+        SoundManager.Instance.PlaySFX("closeGrade");
         UploadAudioFileButton.SetActive(false);
         AddQuestionBox.SetActive(false);
         blocker.SetActive(false);
@@ -134,6 +136,7 @@ public class QuestionCreator : MonoBehaviour
             break; 
         }
         saved = false;
+        SoundManager.Instance.PlaySFX("addTeam");
         CloseAddNewQuestion();
         LoadCategoryQuestions();
         InputBackButton.SetActive(true);
@@ -342,7 +345,7 @@ public class QuestionCreator : MonoBehaviour
         }
         reading_json += "\n\t]\n}";
         System.IO.File.WriteAllText(Application.persistentDataPath + "/" + reading_path, reading_json);
-
+        SoundManager.Instance.PlaySFX("addTeam");
         SavedChanges.SetActive(true);
         FadeOut = true;
         saved = true;
@@ -367,6 +370,7 @@ public class QuestionCreator : MonoBehaviour
 
     public void Exit() {
         if(QuestionBankName.GetComponent<InputField>().text != "" && !saved){
+            SoundManager.Instance.PlaySFX("addTeam");
             ConfirmExit.SetActive(true);
         } else {
             MainMenu();
@@ -383,6 +387,7 @@ public class QuestionCreator : MonoBehaviour
     }
 
     public void CancelExit() {
+        SoundManager.Instance.PlaySFX("closeGrade");
         ConfirmExit.SetActive(false);
     }
 

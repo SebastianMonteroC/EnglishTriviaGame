@@ -80,10 +80,12 @@ public class CustomQuestionMenu : MonoBehaviour
     }
 
     public void DeletePress() {
+        SoundManager.Instance.PlaySFX("openGrade");
         blocker.SetActive(true);
     }
 
     public void BackDelete() {
+        SoundManager.Instance.PlaySFX("backButton");
         blocker.SetActive(false);
     }
 
@@ -102,6 +104,7 @@ public class CustomQuestionMenu : MonoBehaviour
         nameToBeDeleted = "";
         Destroy(objectToBeDeleted);
         BackDelete();
+        SoundManager.Instance.PlaySFX("closeGrade");
     }
 
     private void CheckDelete(string name){

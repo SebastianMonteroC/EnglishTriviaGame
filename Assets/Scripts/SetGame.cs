@@ -97,6 +97,10 @@ public class SetGame : MonoBehaviour
         startButton.interactable = GameManager.teams.Count >= 2 ? true : false;
         undoTeamButton.interactable = GameManager.teams.Count > 0 ? true : false;
 
+        addTeamButton.interactable = inputField.text.Length > 0 && GameManager.teams.Count < 4 ? true : false;
+        startButton.interactable = GameManager.teams.Count >= 2 ? true : false;
+        undoTeamButton.interactable = GameManager.teams.Count > 0 ? true : false;
+
         //Check the add/subtract points to win buttons to put a cap on the amount of points
         subtractPointsButton.interactable = pointsToWin == 3 ? false : true;
         addPointsButton.interactable = pointsToWin == 10 ? false : true;
@@ -104,6 +108,13 @@ public class SetGame : MonoBehaviour
         //Check the add/subtract seconds to timer buttons to put a cap on the amount of seconds
         subtractSeconds.interactable = timerSeconds == 10 ? false : true;
         addSeconds.interactable = timerSeconds == 30 ? false : true;
+
+        ///Check if the input text is the same as an added team. Avoid same name teams
+        foreach(var team in GameManager.teams) {
+            if(inputField.text == team.teamName) {
+                addTeamButton.interactable = false;
+            }
+        }
     }
 
     public void StartGame() {

@@ -750,11 +750,13 @@ public class SpinWheel : MonoBehaviour
     }
 
     public void PauseGame () {
+        SoundManager.Instance.PlaySFX("openGrade");
         pauseOverlay.SetActive(true);
         Time.timeScale = 0;
     }
 
     public void ResumeGame () {
+        SoundManager.Instance.PlaySFX("closeGrade");
         pauseOverlay.SetActive(false);
         Time.timeScale = 1;
     }
@@ -797,6 +799,7 @@ public class SpinWheel : MonoBehaviour
         wheel.ResetWheel();
         GameManager.loadedGame = 0;
         SoundManager.Instance.StopSFX();
+        SoundManager.Instance.PlaySFX("backButton");
         SceneManager.LoadScene("MainMenu");
     }
 
@@ -822,6 +825,7 @@ public class SpinWheel : MonoBehaviour
 
     public void ExitWithoutSaving() {
         SoundManager.Instance.StopSFX();
+        SoundManager.Instance.PlaySFX("backButton");
         wheel.ResetWheel();
         GameManager.loadedGame = 0;
         SceneManager.LoadScene("MainMenu");

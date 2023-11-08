@@ -47,7 +47,8 @@ public class QuestionManager {
         LoadQuestions(customsFolder);
     }
 
-    void SetFileNames(string gradeNumber, string unitNumber) {
+    void SetFileNames(string gradeNumber, string unitNumber)
+     {
         this.speakingFile = this.speakingFile.Replace("{GRADE}",gradeNumber);
         this.speakingFile = this.speakingFile.Replace("{X}",unitNumber);
         this.readingFile = this.readingFile.Replace("{GRADE}",gradeNumber);

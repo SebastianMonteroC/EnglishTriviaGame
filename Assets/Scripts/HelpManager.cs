@@ -12,11 +12,13 @@ public class HelpManager : MonoBehaviour
 
     
     public void ToggleHelp() {
+        SoundManager.Instance.PlaySFX("defaultButton");
         helpActive = !helpActive;
         helpContainer.SetActive(helpActive);
     }
     
     public void CloseHelp() {
+        SoundManager.Instance.PlaySFX("backButton");
         helpActive = false;
         howToPlay.SetActive(true);
         categoriesHelp.SetActive(false);
@@ -24,11 +26,13 @@ public class HelpManager : MonoBehaviour
     }
 
     public void CategoriesHelp() {
+        SoundManager.Instance.PlaySFX("openGrade");
         howToPlay.SetActive(false);
         categoriesHelp.SetActive(true);
     }
 
     public void HowToPlayHelp() {
+        SoundManager.Instance.PlaySFX("closeGrade");
         howToPlay.SetActive(true);
         categoriesHelp.SetActive(false);
     }
