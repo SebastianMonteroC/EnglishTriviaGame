@@ -5,35 +5,57 @@ using UnityEngine;
 public class HelpManager : MonoBehaviour
 {
     [SerializeField] private GameObject helpContainer;
-    [SerializeField] private GameObject howToPlay;
-    [SerializeField] private GameObject categoriesHelp;
+    [SerializeField] private GameObject[] helpPages;
+    [SerializeField] private GameObject nextPage;
+    [SerializeField] private GameObject previousPage;
 
     private bool helpActive = false;
+    private int currentPage = 0;
 
+    private void ButtonUpdate() {
+        if(currentPage == 0) {
+            nextPage.SetActive(true);
+            previousPage.SetActive(false);
+        } else if (currentPage == 4) {
+            nextPage.SetActive(false);
+            previousPage.SetActive(true);
+        } else {
+            nextPage.SetActive(true);
+            previousPage.SetActive(true);
+        }
+    }
     
     public void ToggleHelp() {
         SoundManager.Instance.PlaySFX("defaultButton");
         helpActive = !helpActive;
         helpContainer.SetActive(helpActive);
+        ButtonUpdate();
     }
     
     public void CloseHelp() {
+        currentPage = 0;
         SoundManager.Instance.PlaySFX("backButton");
         helpActive = false;
-        howToPlay.SetActive(true);
-        categoriesHelp.SetActive(false);
+        foreach(var page in helpPages) {
+            page.SetActive(false);
+        }
+        helpPages[0].SetActive(true);
         helpContainer.SetActive(false);
     }
 
-    public void CategoriesHelp() {
+    public void NextPage() {
         SoundManager.Instance.PlaySFX("openGrade");
-        howToPlay.SetActive(false);
-        categoriesHelp.SetActive(true);
+        helpPages[currentPage].SetActive(false);
+        currentPage++;
+        helpPages[currentPage].SetActive(true);
+        ButtonUpdate();
     }
 
-    public void HowToPlayHelp() {
+    public void PreviousPage() {
         SoundManager.Instance.PlaySFX("closeGrade");
-        howToPlay.SetActive(true);
-        categoriesHelp.SetActive(false);
+        helpPages[currentPage].SetActive(false);
+        currentPage--;
+        helpPages[currentPage].SetActive(true);
+        ButtonUpdate();
     }
 }
