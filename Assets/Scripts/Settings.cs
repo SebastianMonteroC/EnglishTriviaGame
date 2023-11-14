@@ -15,6 +15,9 @@ public class Settings : MonoBehaviour
     [SerializeField] GameObject blocker;
     [SerializeField] GameObject SavedChanges;
     [SerializeField] GameObject SavedText;
+    [SerializeField] GameObject sfxSlider;
+    [SerializeField] GameObject musicSlider;
+
     private bool FadeOut = false;
 
     void Update() {
@@ -36,6 +39,11 @@ public class Settings : MonoBehaviour
                 SavedText.GetComponent<Text>().color = new Color (textColor.r, textColor.g, textColor.b, 150);
             }
         }
+    }
+
+    void Start() {
+        sfxSlider.GetComponent<Slider>().value = GameManager.sfxVolume;
+        musicSlider.GetComponent<Slider>().value = GameManager.musicVolume;
     }
 
     public void MainMenu() {
@@ -79,5 +87,13 @@ public class Settings : MonoBehaviour
         BackDelete();
         SavedChanges.SetActive(true);
         FadeOut = true;
+    }
+
+    public void SfxVolume(){
+        SoundManager.Instance.SetSFXVolume(sfxSlider.GetComponent<Slider>().value);
+    }
+
+    public void MusicVolume(){
+        SoundManager.Instance.SetMusicVolume(musicSlider.GetComponent<Slider>().value);
     }
 }

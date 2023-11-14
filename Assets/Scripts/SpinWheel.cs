@@ -112,6 +112,7 @@ public class SpinWheel : MonoBehaviour
     private List<GameObject> AllPowerUps;
 
     private void Start(){
+        SoundManager.Instance.PlayMusic("in-game");
         AllPowerUps = InsertPowerUps();
 
         timerValue = GameManager.time;
@@ -364,6 +365,7 @@ public class SpinWheel : MonoBehaviour
     public void PlayAudio(){
         stopAudio.SetActive(true);
         playAudio.SetActive(false);
+        SoundManager.Instance.LowerVolumeForListening();
         SoundManager.Instance.PlayListeningAudio(currentQuestion.path);
     }
 
@@ -371,6 +373,7 @@ public class SpinWheel : MonoBehaviour
         stopAudio.SetActive(false);
         playAudio.SetActive(true);
         SoundManager.Instance.StopSFX();
+        SoundManager.Instance.ResetVolume();
     }
 
     public void LoadListeningAudios() {
@@ -800,6 +803,8 @@ public class SpinWheel : MonoBehaviour
         GameManager.loadedGame = 0;
         SoundManager.Instance.StopSFX();
         SoundManager.Instance.PlaySFX("backButton");
+        GameManager.menuMusic = false;
+        SoundManager.Instance.StopMusic();
         SceneManager.LoadScene("MainMenu");
     }
 
@@ -828,6 +833,8 @@ public class SpinWheel : MonoBehaviour
         SoundManager.Instance.PlaySFX("backButton");
         wheel.ResetWheel();
         GameManager.loadedGame = 0;
+        GameManager.menuMusic = false;
+        SoundManager.Instance.StopMusic();
         SceneManager.LoadScene("MainMenu");
     }
 }

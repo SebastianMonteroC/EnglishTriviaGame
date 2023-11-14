@@ -124,6 +124,8 @@ public class SetGame : MonoBehaviour
         GameManager.turnCounter = 1;
         GameManager.newGame = true;
         SoundManager.Instance.PlaySFX("beginGame");
+        SoundManager.Instance.StopMusic();
+        GameManager.menuMusic = false;
         SceneManager.LoadScene("WheelScreen");
     }
 

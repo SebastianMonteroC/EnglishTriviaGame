@@ -14,10 +14,13 @@ public class SoundManager : MonoBehaviour
 {
     public static SoundManager Instance;
     public Sound[] sfxSounds;
+    public Sound[] musicSounds;
     public List<Sound> unitListeningSounds;
     public AudioImporter importer;
     public AudioSource sfxSource;
+    public AudioSource musicSource;
     private string currentSound;
+    private string currentSong;
     
     private void Awake() {
         if(Instance == null) {
@@ -27,6 +30,31 @@ public class SoundManager : MonoBehaviour
         } else {
             Destroy(gameObject);
         }
+    }
+
+    public void PlayMusic(string name) {
+        Sound sound = Array.Find(musicSounds, x => x.name == name);
+        currentSong = name;
+        if (sound != null) {
+            musicSource.PlayOneShot(sound.audio);
+            musicSource.loop = true;
+        }
+    }
+
+    public void LowerVolumeForListening() {
+        musicSource.volume = 0.05f;
+    }
+    
+    public void ResetVolume() {
+        musicSource.volume = GameManager.musicVolume;
+    }
+
+    public void LoopMusic(bool loop) {
+        musicSource.loop = loop;
+    }
+
+    public void StopMusic() {
+        musicSource.Stop();
     }
 
     public void PlaySFX(string name) {
@@ -95,5 +123,15 @@ public class SoundManager : MonoBehaviour
 
     public void ClearUnitSounds() {
         this.unitListeningSounds.Clear();
+    }
+
+    public void SetMusicVolume(float volume){
+        musicSource.volume = volume;
+        GameManager.musicVolume = volume;
+    }
+
+    public void SetSFXVolume(float volume){
+        sfxSource.volume = volume;
+        GameManager.sfxVolume = volume;
     }
 }

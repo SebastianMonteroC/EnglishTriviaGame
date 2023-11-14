@@ -29,6 +29,9 @@ public class GameManager : MonoBehaviour
     public List<string> sabotages;
     public static bool sabotageActive = false;
 
+    public static bool menuMusic = false;
+    public static float musicVolume = 0.25f;
+    public static float sfxVolume = 0.65f;
 
     public void Start(){
         CleanGameManager();

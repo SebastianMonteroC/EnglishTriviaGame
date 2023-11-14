@@ -8,6 +8,12 @@ using UnityEngine.UI;
 public class MainMenu : MonoBehaviour
 {
     void Start() {
+        if(!GameManager.menuMusic) {
+            SoundManager.Instance.PlayMusic("main-theme");
+            GameManager.menuMusic = true;
+        }
+        
+        SoundManager.Instance.LoopMusic(true);
         Time.timeScale = 1;
     }
 
