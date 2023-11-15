@@ -51,7 +51,7 @@ public class CustomQuestionMenu : MonoBehaviour
         childObject.transform.SetParent(GameObject.Find("Panel").transform, false);
         childObject.transform.Find("QuestionBankName").gameObject.GetComponent<Text>().text = PlayerPrefs.GetString("custom" + question_id.ToString());
         childObject.transform.Find("Delete").gameObject.GetComponent<Button>().onClick.AddListener(delegate { RemoveQuestionBank("custom" + question_id.ToString(), childObject); });
-        childObject.transform.Find("Edit").gameObject.GetComponent<Button>().onClick.AddListener(delegate { SelectCustomQuestionBank(PlayerPrefs.GetString("custom" + question_id.ToString())); });
+        childObject.transform.Find("Edit").gameObject.GetComponent<Button>().onClick.AddListener(delegate { SelectCustomQuestionBank(PlayerPrefs.GetString("custom" + question_id.ToString()), question_id); });
     }
 
     public void RemoveQuestionBank(string name, GameObject deleted) {
@@ -61,15 +61,28 @@ public class CustomQuestionMenu : MonoBehaviour
         DeletePress();
     }
 
-    public void SelectCustomQuestionBank(string name){
+    public void SelectCustomQuestionBank(string name, int id){
         GameManager.grade = "";
         GameManager.unit = "";
         GameManager.customQuestionBank = name;
+        GameManager.questionBankSpace = "custom" + id.ToString();
         SoundManager.Instance.PlaySFX("newGame");
+        GameManager.editingBank = true;
         SceneManager.LoadScene("QuestionCreator");
     }
 
     public void NewQuestionBank() {
+        if(PlayerPrefs.HasKey("custom1")){
+            if(PlayerPrefs.HasKey("custom2")){
+                GameManager.questionBankSpace = "custom3";
+            } else {
+                GameManager.questionBankSpace = "custom2";
+            }
+            
+        } else {
+            GameManager.questionBankSpace = "custom1";
+        }
+
         SoundManager.Instance.PlaySFX("settings");
         SceneManager.LoadScene("QuestionCreator");
     }

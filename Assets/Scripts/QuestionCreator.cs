@@ -8,6 +8,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using SimpleFileBrowser;
 
 public class QuestionCreator : MonoBehaviour
 {
@@ -226,21 +227,40 @@ public class QuestionCreator : MonoBehaviour
         SaveQuestionBank.GetComponent<Button>().interactable = QuestionBankName.GetComponent<InputField>().text.Length > 0 ? true : false;
 
         if(editingBank == false) {
-            SaveQuestionBank.GetComponent<Button>().interactable = QuestionBankName.GetComponent<InputField>().text != PlayerPrefs.GetString("custom1")
-            && QuestionBankName.GetComponent<InputField>().text != PlayerPrefs.GetString("custom2")
-            && QuestionBankName.GetComponent<InputField>().text != PlayerPrefs.GetString("custom3") ? true : false;
+            switch(GameManager.questionBankSpace) {
+                case "custom1":
+                SaveQuestionBank.GetComponent<Button>().interactable =
+                QuestionBankName.GetComponent<InputField>().text != PlayerPrefs.GetString("custom2")
+                && QuestionBankName.GetComponent<InputField>().text != PlayerPrefs.GetString("custom3") ? true : false;
+                break;
+                case "custom2":
+                SaveQuestionBank.GetComponent<Button>().interactable =
+                QuestionBankName.GetComponent<InputField>().text != PlayerPrefs.GetString("custom1")
+                && QuestionBankName.GetComponent<InputField>().text != PlayerPrefs.GetString("custom3") ? true : false;
+                break;
+                case "custom3":
+                SaveQuestionBank.GetComponent<Button>().interactable =
+                QuestionBankName.GetComponent<InputField>().text != PlayerPrefs.GetString("custom2")
+                && QuestionBankName.GetComponent<InputField>().text != PlayerPrefs.GetString("custom1") ? true : false;
+                break;
+            }
+            
         }
     }
 
     public void SelectFile() {
-        string path = EditorUtility.OpenFilePanel("Select .mp3 audio", "", "mp3");
-        if(path.Length != 0) {
-            SelectedAudioPath = path;
+        FileBrowser.SetFilters( true, new FileBrowser.Filter("Audio Files", ".mp3"));
+        FileBrowser.ShowLoadDialog(OnSuccess, null, FileBrowser.PickMode.Files, false, null, null, "Select an audio file for this question (.mp3)", "Select");
+    }
+
+    public void OnSuccess(string[] paths) {
+        if(paths[0].Length != 0) {
+            SelectedAudioPath = paths[0];
             SelectedFileText.SetActive(true);
             SelectedFileText.GetComponent<Text>().text = "Selected File:\n" + Path.GetFileName(SelectedAudioPath);
         }
+        
     }
-
     public void EditQuestion(Question question, string category) {
         editing = true;
         QuestionInputField.GetComponent<InputField>().text = question.question;
@@ -262,13 +282,14 @@ public class QuestionCreator : MonoBehaviour
                 SpeakingQuestions.Remove(question);
             break;
         }
+        saved = false;
     }
 
     public void RemoveQuestion(Question question, string category) {
         switch (category)  {
             case "Listening":
                 ListeningQuestions.Remove(question);
-                UnityEditor.FileUtil.DeleteFileOrDirectory(question.path);
+                File.Delete(question.path);
             break;
             case "Reading":
                 ReadingQuestions.Remove(question);
@@ -293,7 +314,7 @@ public class QuestionCreator : MonoBehaviour
         foreach(var listening in ListeningQuestions) {
             string path = listening.path;
             if(!File.Exists(Application.persistentDataPath + "/" + QuestionBankName.GetComponent<InputField>().text + "_audios/" + Path.GetFileName(path))) {
-                FileUtil.CopyFileOrDirectory(path, Application.persistentDataPath + "/" + QuestionBankName.GetComponent<InputField>().text + "_audios/" + Path.GetFileName(path));
+                File.Copy(path, Application.persistentDataPath + "/" + QuestionBankName.GetComponent<InputField>().text + "_audios/" + Path.GetFileName(path));
                 listening.path = Application.persistentDataPath + "/" + QuestionBankName.GetComponent<InputField>().text + "_audios/" + Path.GetFileName(path);
             }
             
@@ -350,11 +371,11 @@ public class QuestionCreator : MonoBehaviour
         FadeOut = true;
         saved = true;
         if(!editingBank){
-            if(!PlayerPrefs.HasKey("custom1")){
+            if(!PlayerPrefs.HasKey("custom1") || QuestionBankName.GetComponent<InputField>().text == PlayerPrefs.GetString("custom1")){
                 PlayerPrefs.SetString("custom1", QuestionBankName.GetComponent<InputField>().text);
-            } else if(!PlayerPrefs.HasKey("custom2")){
+            } else if(!PlayerPrefs.HasKey("custom2") || QuestionBankName.GetComponent<InputField>().text == PlayerPrefs.GetString("custom2")){
                 PlayerPrefs.SetString("custom2", QuestionBankName.GetComponent<InputField>().text);
-            } else {
+            } else if (!PlayerPrefs.HasKey("custom3") || QuestionBankName.GetComponent<InputField>().text == PlayerPrefs.GetString("custom3")){
                 PlayerPrefs.SetString("custom3", QuestionBankName.GetComponent<InputField>().text);
             }
         } else {
@@ -369,9 +390,36 @@ public class QuestionCreator : MonoBehaviour
     }
 
     public void Exit() {
+        Debug.Log(saved);
         if(QuestionBankName.GetComponent<InputField>().text != "" && !saved){
-            SoundManager.Instance.PlaySFX("addTeam");
-            ConfirmExit.SetActive(true);
+            if(!GameManager.editingBank) {
+                string customX = "custom1";
+                string customY = "custom2";
+                switch (GameManager.questionBankSpace) {
+                    case "custom1":
+                        customX = "custom2";
+                        customY = "custom3";
+                    break;
+                    case "custom2":
+                        customX = "custom1";
+                        customY = "custom3";
+                    break;
+                    case "custom3":
+                        customX = "custom2";
+                        customY = "custom1";
+                    break;
+                }
+                if(QuestionBankName.GetComponent<InputField>().text != PlayerPrefs.GetString(customX)
+                && QuestionBankName.GetComponent<InputField>().text != PlayerPrefs.GetString(customY)) {
+                    SoundManager.Instance.PlaySFX("addTeam");
+                    ConfirmExit.SetActive(true);
+                } else {
+                    MainMenu();
+                }
+            } else {
+                SoundManager.Instance.PlaySFX("addTeam");
+                ConfirmExit.SetActive(true);
+            }
         } else {
             MainMenu();
         }
@@ -392,6 +440,7 @@ public class QuestionCreator : MonoBehaviour
     }
 
     public void MainMenu() {
+        GameManager.editingBank = false;
         GameManager.customQuestionBank = "";
         SoundManager.Instance.PlaySFX("backButton");
         SceneManager.LoadScene("CustomBankMenu");

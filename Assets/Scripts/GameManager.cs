@@ -33,6 +33,9 @@ public class GameManager : MonoBehaviour
     public static float musicVolume = 0.25f;
     public static float sfxVolume = 0.65f;
 
+    public static string questionBankSpace = "custom1";
+    public static bool editingBank = false;
+
     public void Start(){
         CleanGameManager();
         TeamTurn();
